@@ -1,41 +1,50 @@
-plugins {
-	id 'java'
-	id 'org.springframework.boot' version '2.7.7'
-	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+buildscript {
+    ext {
+        springBootVersion = '2.7.7'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+        classpath "io.spring.gradle:dependency-management-plugin:1.0.11.RELEASE"
+    }
 }
 
-group = 'com.sh'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
+// 하위 모든 프로젝트 공통 세팅
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'idea'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
 
-configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+    group 'org.example'
+    version '1.0-SNAPSHOT'
+
+    sourceCompatibility = '11'
+    compileJava.options.encoding = 'UTF-8'
+
+    repositories {
+        mavenCentral()
+    }
+
+    // 하위 모듈에서 공통으로 사용하는 세팅 추가
+    dependencies {
+        annotationProcessor 'org.projectlombok:lombok'
+        annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+    }
+
+    test {
+        useJUnitPlatform()
+    }
 }
 
-repositories {
-	mavenCentral()
-}
+project(':threesentences-api') {
 
-dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
+    bootJar { enabled = false }
+    jar { enabled = true }
 
-	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
-
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
-
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation "org.assertj:assertj-core:3.12.2"
-	testImplementation "org.junit.jupiter:junit-jupiter-params:5.4.2"
-	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
-}
-
-tasks.named('test') {
-	useJUnitPlatform()
+    dependencies {
+        implementation project(':threesentences-core')
+    }
 }
