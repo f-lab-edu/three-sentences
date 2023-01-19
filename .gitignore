@@ -1,6 +1,12 @@
 HELP.md
 .gradle
+threesentences-api/.gradle
+threesentences-core/.gradle
+
 build/
+threesentences-api/build
+threesentences-core/build
+
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
