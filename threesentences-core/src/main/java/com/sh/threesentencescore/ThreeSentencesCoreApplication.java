@@ -1,4 +1,4 @@
-package com.sh.threesetencescore;
+package com.sh.threesentencescore;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

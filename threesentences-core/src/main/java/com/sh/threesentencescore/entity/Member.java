@@ -1,4 +1,4 @@
-package com.sh.threesetencescore.entity;
+package com.sh.threesentencescore.entity;
 
 
 public class Member {
