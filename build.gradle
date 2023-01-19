@@ -17,12 +17,19 @@ subprojects {
     apply plugin: 'idea'
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
-
+    apply plugin: 'checkstyle'
     group 'org.example'
     version '1.0-SNAPSHOT'
 
-    sourceCompatibility = '11'
+//    sourceCompatibility 추가하면  invalid source release: 11 에러 발생? 이유?
+//    sourceCompatibility = '11'
     compileJava.options.encoding = 'UTF-8'
+
+    checkstyle {
+        showViolations true
+        ignoreFailures false
+        configFile = file("$rootDir/config/checkstyle/checkstyle.xml")
+    }
 
     repositories {
         mavenCentral()
