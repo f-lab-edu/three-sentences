@@ -1,1 +1,24 @@
-
+spring:
+  profiles.active: local
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+  flyway:
+    enabled: false
+  datasource:
+    url: jdbc:mysql://localhost:13306/ev_database?allowPublicKeyRetrieval=true&useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+    username: root
+    password: EVev123!@#
+    hikari:
+      max-lifetime: 56000
+      connection-timeout: 2000
+  sql:
+    init:
+      mode: always
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
