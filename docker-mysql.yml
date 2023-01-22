@@ -1,0 +1,14 @@
+version: "3"
+
+services:
+  mysql:
+    image: mysql:5.7 # Mysql image
+    volumes: # 호스트 디렉토리와 컨테이너 디렉토리 연결
+      - ./mysql/mysqldata:/var/lib/mysql
+      - ./mysql/conf.d:/etc/mysql/conf.d
+    environment: # 컨테이너 안의 환경변수 설정
+      - MYSQL_ROOT_PASSWORD=EVev123!@#
+      - MYSQL_DATABASE=ev_database
+    ports: # 호스트와 컨테이너 포트 매핑
+      - "13306:3306"
+    restart: unless-stopped # 컨테이너 다운 시 항상 재시작
