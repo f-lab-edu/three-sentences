@@ -32,6 +32,11 @@ public class UserController {
         return userService.save(userRequestDto);
     }
 
+    /**
+     * 이메일 주소로 사용자 중복여부를 확인합니다.
+     *
+     * @param email 중복 확인 요청 이메일
+     */
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/email/duplicate-check")
     public void checkEmailDuplicated(@RequestParam String email) {
