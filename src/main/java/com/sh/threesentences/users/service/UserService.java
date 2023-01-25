@@ -5,6 +5,7 @@ import com.sh.threesentences.users.dto.UserResponseDto;
 import com.sh.threesentences.users.entity.Users;
 import com.sh.threesentences.users.repository.UserRepository;
 import com.sh.threesentences.utils.PasswordEncoder;
+import java.util.Optional;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,4 +27,11 @@ public class UserService {
         return savedUser.toUserResponseDto();
     }
 
+    public void checkEmailDuplicated(String email) {
+        Optional<String> findEmail = userRepository.findByEmail(email);
+        if (findEmail.isPresent()) {
+            throw new RuntimeException();
+        }
+
+    }
 }
