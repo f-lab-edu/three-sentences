@@ -1,5 +1,6 @@
 package com.sh.threesentences.users.entity;
 
+import com.sh.threesentences.common.entity.BaseEntity;
 import com.sh.threesentences.users.dto.UserResponseDto;
 import com.sh.threesentences.users.enums.MembershipType;
 import javax.persistence.Column;
@@ -18,7 +19,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Users {
+public class Users extends BaseEntity {
 
     /**
      * 엔티티 식별자
