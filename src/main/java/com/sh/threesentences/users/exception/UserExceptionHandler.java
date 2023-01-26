@@ -1,6 +1,6 @@
 package com.sh.threesentences.users.exception;
 
-import com.sh.threesentences.dto.ErrorResponseDto;
+import com.sh.threesentences.common.dto.ErrorResponseDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

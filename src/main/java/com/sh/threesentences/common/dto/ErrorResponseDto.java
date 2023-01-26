@@ -1,4 +1,4 @@
-package com.sh.threesentences.dto;
+package com.sh.threesentences.common.dto;
 
 import lombok.Getter;
 
