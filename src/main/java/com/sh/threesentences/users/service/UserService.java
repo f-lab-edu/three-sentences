@@ -25,10 +25,7 @@ public class UserService {
      * @return 등록된 사용자 정보
      */
     public UserResponseDto save(UserRequestDto userRequestDto) {
-        Users user = new Users(userRequestDto.getEmail(),
-            userRequestDto.getName(),
-            PasswordEncoder.encrypt(userRequestDto.getPassword()),
-            userRequestDto.getMembership());
+        Users user = userRequestDto.toEntity(PasswordEncoder.encrypt(userRequestDto.getPassword()));
         Users savedUser = userRepository.save(user);
 
         return savedUser.toUserResponseDto();

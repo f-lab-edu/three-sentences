@@ -10,6 +10,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -63,5 +64,14 @@ public class Users extends BaseEntity {
 
     public UserResponseDto toUserResponseDto() {
         return new UserResponseDto(this.id, this.email, this.name, this.membership);
+    }
+
+    @Builder
+    public Users(Long id, String email, String name, String password, MembershipType membership) {
+        this.id = id;
+        this.email = email;
+        this.name = name;
+        this.password = password;
+        this.membership = membership;
     }
 }
