@@ -3,8 +3,11 @@ package com.sh.threesentences.users.controller;
 import com.sh.threesentences.users.dto.UserRequestDto;
 import com.sh.threesentences.users.dto.UserResponseDto;
 import com.sh.threesentences.users.service.UserService;
+import javax.validation.Valid;
+import javax.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
+@Validated
 public class UserController {
 
     private final UserService userService;
@@ -28,7 +32,7 @@ public class UserController {
      */
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public UserResponseDto save(@RequestBody UserRequestDto userRequestDto) {
+    public UserResponseDto save(@RequestBody @Valid UserRequestDto userRequestDto) {
         return userService.save(userRequestDto);
     }
 
@@ -39,7 +43,7 @@ public class UserController {
      */
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/email/duplicate-check")
-    public void checkEmailDuplicated(@RequestParam String email) {
+    public void checkEmailDuplicated(@RequestParam @Email(message="이메일 형식이 잘못되었습니다.") String email) {
         userService.checkEmailDuplicated(email);
     }
 
