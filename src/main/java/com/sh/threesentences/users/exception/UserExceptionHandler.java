@@ -3,10 +3,9 @@ package com.sh.threesentences.users.exception;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 import com.sh.threesentences.common.dto.ErrorResponseDto;
-import java.util.ArrayList;
 import java.util.List;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
+import java.util.stream.Collectors;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -37,17 +36,12 @@ public class UserExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(code= BAD_REQUEST)
     public ErrorResponseDto handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
-        BindingResult bindingResult = ex.getBindingResult();
-        List<FieldError> fieldErrors = bindingResult.getFieldErrors();
-        return new ErrorResponseDto(processFieldErrors(fieldErrors));
-    }
+        List<String> errors = ex.getBindingResult()
+            .getFieldErrors()
+            .stream()
+            .map(DefaultMessageSourceResolvable::getDefaultMessage)
+            .collect(Collectors.toList());
 
-    private String processFieldErrors(List<FieldError> fieldErrors) {
-        ArrayList<String> errorList = new ArrayList<>();
-        for (org.springframework.validation.FieldError fieldError: fieldErrors) {
-            errorList.add(fieldError.getDefaultMessage());
-        }
-        return errorList.toString();
+        return new ErrorResponseDto(errors.toString());
     }
-
 }
