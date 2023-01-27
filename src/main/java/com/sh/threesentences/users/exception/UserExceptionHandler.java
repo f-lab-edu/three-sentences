@@ -23,8 +23,20 @@ public class UserExceptionHandler {
      */
     @ExceptionHandler(EmailDuplicateException.class)
     @ResponseStatus(code = BAD_REQUEST)
-    public ErrorResponseDto handleEmailDuplicateException() {
-        return new ErrorResponseDto("이미 가입된 이메일입니다.");
+    public ErrorResponseDto handleEmailDuplicateException(EmailDuplicateException ex) {
+        return new ErrorResponseDto(ex.getMessage());
+    }
+
+    /**
+     * 등록되지 않은 사용자에 대한 접근을 할 때, 예외를 던집니다.
+     *
+     * @param ex UserNotFoundException
+     * @return 메시지가 담긴 응답
+     */
+    @ExceptionHandler(UserNotFoundException.class)
+    @ResponseStatus(code = BAD_REQUEST)
+    public ErrorResponseDto handleUserNotFoundException(UserNotFoundException ex) {
+        return new ErrorResponseDto(ex.getMessage());
     }
 
     /**
