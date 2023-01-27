@@ -55,13 +55,6 @@ public class Users extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private MembershipType membership = MembershipType.FREE;
 
-    public Users(String email, String name, String password, MembershipType membership) {
-        this.email = email;
-        this.name = name;
-        this.password = password;
-        this.membership = membership;
-    }
-
     public UserResponseDto toUserResponseDto() {
         return new UserResponseDto(this.id, this.email, this.name, this.membership);
     }
@@ -74,4 +67,5 @@ public class Users extends BaseEntity {
         this.password = password;
         this.membership = membership;
     }
+
 }
