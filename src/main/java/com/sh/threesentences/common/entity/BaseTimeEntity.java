@@ -24,4 +24,8 @@ public abstract class BaseTimeEntity {
 
     @Column
     private boolean isDeleted = false;
+
+    public void delete() {
+        this.isDeleted = true;
+    }
 }
