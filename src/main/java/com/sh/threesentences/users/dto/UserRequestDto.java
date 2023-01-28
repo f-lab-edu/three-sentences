@@ -1,6 +1,6 @@
 package com.sh.threesentences.users.dto;
 
-import com.sh.threesentences.users.entity.Users;
+import com.sh.threesentences.users.entity.User;
 import com.sh.threesentences.users.enums.MembershipType;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -27,8 +27,8 @@ public class UserRequestDto {
 
     private final MembershipType membership;
 
-    public Users toEntity(String encryptedPassword) {
-        return Users.builder()
+    public User toEntity(String encryptedPassword) {
+        return User.builder()
             .email(this.getEmail())
             .name(this.getName())
             .password(encryptedPassword)

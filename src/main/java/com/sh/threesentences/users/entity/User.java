@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Users extends BaseEntity {
+public class User extends BaseEntity {
 
     /**
      * 엔티티 식별자
@@ -60,7 +60,7 @@ public class Users extends BaseEntity {
     }
 
     @Builder
-    public Users(Long id, String email, String name, String password, MembershipType membership) {
+    public User(Long id, String email, String name, String password, MembershipType membership) {
         this.id = id;
         this.email = email;
         this.name = name;

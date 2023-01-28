@@ -2,7 +2,7 @@ package com.sh.threesentences.users.service;
 
 import com.sh.threesentences.users.dto.UserRequestDto;
 import com.sh.threesentences.users.dto.UserResponseDto;
-import com.sh.threesentences.users.entity.Users;
+import com.sh.threesentences.users.entity.User;
 import com.sh.threesentences.users.exception.EmailDuplicateException;
 import com.sh.threesentences.users.exception.UserNotFoundException;
 import com.sh.threesentences.users.repository.UserRepository;
@@ -25,8 +25,8 @@ public class UserService {
      * @return 등록된 사용자 정보
      */
     public UserResponseDto save(UserRequestDto userRequestDto) {
-        Users user = userRequestDto.toEntity(PasswordEncoder.encrypt(userRequestDto.getPassword()));
-        Users savedUser = userRepository.save(user);
+        User user = userRequestDto.toEntity(PasswordEncoder.encrypt(userRequestDto.getPassword()));
+        User savedUser = userRepository.save(user);
 
         return savedUser.toUserResponseDto();
     }
@@ -67,7 +67,7 @@ public class UserService {
      * @param id 사용자 ID
      * @return 사용자 엔티티
      */
-    private Users findById(long id) {
+    private User findById(long id) {
         return userRepository.findById(id)
             .orElseThrow(UserNotFoundException::new);
     }

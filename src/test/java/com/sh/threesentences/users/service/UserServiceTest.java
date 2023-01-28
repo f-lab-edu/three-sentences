@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.sh.threesentences.users.dto.UserResponseDto;
-import com.sh.threesentences.users.entity.Users;
+import com.sh.threesentences.users.entity.User;
 import com.sh.threesentences.users.exception.EmailDuplicateException;
 import com.sh.threesentences.users.exception.UserNotFoundException;
 import com.sh.threesentences.users.repository.UserRepository;
@@ -85,7 +85,7 @@ class UserServiceTest {
             void saveUser() {
                 userService.save(VALID_REQUEST);
                 userService.delete(USER_ID);
-                Users deletedUser = userRepository.findById(USER_ID)
+                User deletedUser = userRepository.findById(USER_ID)
                     .orElseThrow(UserNotFoundException::new);
 
                 assertThat(deletedUser.isDeleted()).isTrue();
