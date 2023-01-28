@@ -1,5 +1,6 @@
 package com.sh.threesentences.users.dto;
 
+import com.sh.threesentences.users.entity.User;
 import com.sh.threesentences.users.enums.MembershipType;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -16,5 +17,9 @@ public class UserResponseDto {
     private final String name;
 
     private final MembershipType membership;
+
+    public static UserResponseDto fromEntity(User user) {
+        return new UserResponseDto(user.getId(), user.getEmail(), user.getName(), user.getMembership());
+    }
 
 }

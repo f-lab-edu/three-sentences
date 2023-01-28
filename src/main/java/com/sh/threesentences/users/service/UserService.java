@@ -26,9 +26,7 @@ public class UserService {
      */
     public UserResponseDto save(UserRequestDto userRequestDto) {
         User user = userRequestDto.toEntity(PasswordEncoder.encrypt(userRequestDto.getPassword()));
-        User savedUser = userRepository.save(user);
-
-        return savedUser.toUserResponseDto();
+        return UserResponseDto.fromEntity(userRepository.save(user));
     }
 
     /**
@@ -58,7 +56,7 @@ public class UserService {
      * @return UserResponseDto
      */
     public UserResponseDto findUser(Long id) {
-        return findById(id).toUserResponseDto();
+        return UserResponseDto.fromEntity(findById(id));
     }
 
     /**
