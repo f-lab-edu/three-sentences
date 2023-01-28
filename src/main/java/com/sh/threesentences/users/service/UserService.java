@@ -35,10 +35,10 @@ public class UserService {
      * @param email 중복 체크를 위한 이메일 주소
      */
     public void checkEmailDuplicated(String email) {
-        userRepository.findByEmail(email)
-            .ifPresent(e -> {
-                throw new EmailDuplicateException();
-            });
+        boolean isExisted = userRepository.existsByEmail(email);
+        if (isExisted) {
+            throw new EmailDuplicateException();
+        }
     }
 
     /**
