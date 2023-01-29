@@ -18,7 +18,7 @@ public class PasswordEncoder {
             md.update(text.getBytes());
             return bytesToHex(md.digest());
         } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeNoSuchAlgorithmException(e.getMessage());
         }
     }
 
@@ -29,5 +29,12 @@ public class PasswordEncoder {
         }
         return builder.toString();
     }
+
+    static class RuntimeNoSuchAlgorithmException extends RuntimeException {
+        public RuntimeNoSuchAlgorithmException(String message) {
+            super(message);
+        }
+    }
+
 
 }
