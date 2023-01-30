@@ -1,8 +1,9 @@
 package com.sh.threesentences.users.entity;
 
 import com.sh.threesentences.common.entity.BaseEntity;
-import com.sh.threesentences.users.dto.UserResponseDto;
+import com.sh.threesentences.readingspace.entity.UserReadingSpaceMapping;
 import com.sh.threesentences.users.enums.MembershipType;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -10,6 +11,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -55,9 +57,8 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private MembershipType membership = MembershipType.FREE;
 
-    public UserResponseDto toUserResponseDto() {
-        return new UserResponseDto(this.id, this.email, this.name, this.membership);
-    }
+    @OneToMany(mappedBy = "user")
+    private List<UserReadingSpaceMapping> userReadingSpaceMappingList;
 
     @Builder
     public User(Long id, String email, String name, String password, MembershipType membership) {
