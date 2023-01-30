@@ -1,0 +1,34 @@
+package com.sh.threesentences.readingspace.service;
+
+import com.sh.threesentences.readingspace.dto.ReadingSpaceRequestDto;
+import com.sh.threesentences.readingspace.dto.ReadingSpaceResponseDto;
+import com.sh.threesentences.readingspace.entity.ReadingSpace;
+import com.sh.threesentences.readingspace.entity.UserReadingSpaceMapping;
+import com.sh.threesentences.readingspace.enums.UserRole;
+import com.sh.threesentences.readingspace.repository.ReadingSpaceRepository;
+import com.sh.threesentences.readingspace.repository.UserReadingSpaceRepository;
+import com.sh.threesentences.users.entity.User;
+import javax.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+@Service
+@Transactional
+@RequiredArgsConstructor
+public class ReadingSpaceService {
+
+    private final ReadingSpaceRepository readingSpaceRepository;
+
+    private final UserReadingSpaceRepository userReadingSpaceRepository;
+
+    public ReadingSpaceResponseDto save(ReadingSpaceRequestDto readingSpaceRequestDto, User user) {
+        ReadingSpace savedReadingSpace = readingSpaceRepository.save(readingSpaceRequestDto.toEntity());
+
+        // TODO: 로그인한 사용자의 정보를 조회해서 User 엔티티를 UserReadingSpaceMapping에 추가해줘야함.
+        UserReadingSpaceMapping userReadingSpaceMapping = UserReadingSpaceMapping.createUserReadingSpaceMapping(user,
+            savedReadingSpace, UserRole.ADMIN);
+        userReadingSpaceRepository.save(userReadingSpaceMapping);
+
+        return ReadingSpaceResponseDto.fromEntity(savedReadingSpace);
+    }
+}

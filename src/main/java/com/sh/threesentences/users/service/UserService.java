@@ -1,5 +1,8 @@
 package com.sh.threesentences.users.service;
 
+import com.sh.threesentences.common.enums.OpenType;
+import com.sh.threesentences.readingspace.dto.ReadingSpaceRequestDto;
+import com.sh.threesentences.readingspace.service.ReadingSpaceService;
 import com.sh.threesentences.users.dto.UserRequestDto;
 import com.sh.threesentences.users.dto.UserResponseDto;
 import com.sh.threesentences.users.entity.User;
@@ -18,6 +21,8 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    private final ReadingSpaceService readingSpaceService;
+
     /**
      * 사용자를 등록합니다.
      *
@@ -26,7 +31,11 @@ public class UserService {
      */
     public UserResponseDto save(UserRequestDto userRequestDto) {
         User user = userRequestDto.toEntity(PasswordEncoder.encrypt(userRequestDto.getPassword()));
-        return UserResponseDto.fromEntity(userRepository.save(user));
+        User savedUser = userRepository.save(user);
+
+        readingSpaceService.save(new ReadingSpaceRequestDto("MyReadingSpace", "", OpenType.PUBLIC, null), savedUser);
+
+        return UserResponseDto.fromEntity(savedUser);
     }
 
     /**

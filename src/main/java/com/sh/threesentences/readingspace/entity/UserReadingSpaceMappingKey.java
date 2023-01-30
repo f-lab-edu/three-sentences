@@ -5,9 +5,11 @@ import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Embeddable
 @Getter
+@NoArgsConstructor
 public class UserReadingSpaceMappingKey implements Serializable {
 
     @Column(name = "user_id")
@@ -16,6 +18,10 @@ public class UserReadingSpaceMappingKey implements Serializable {
     @Column(name = "readingspace_id")
     Long readingSpaceId;
 
+    public UserReadingSpaceMappingKey(Long userId, Long readingSpaceId) {
+        this.userId = userId;
+        this.readingSpaceId = readingSpaceId;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) {
