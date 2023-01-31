@@ -1,5 +1,6 @@
 package com.sh.threesentences.users.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sh.threesentences.common.entity.BaseEntity;
 import com.sh.threesentences.readingspace.entity.UserReadingSpaceMapping;
 import com.sh.threesentences.users.enums.MembershipType;
@@ -58,6 +59,7 @@ public class User extends BaseEntity {
     private MembershipType membership = MembershipType.FREE;
 
     @OneToMany(mappedBy = "user")
+    @JsonManagedReference
     private List<UserReadingSpaceMapping> userReadingSpaceMappingList;
 
     @Builder

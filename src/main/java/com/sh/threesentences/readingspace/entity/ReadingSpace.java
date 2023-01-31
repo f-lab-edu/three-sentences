@@ -1,5 +1,6 @@
 package com.sh.threesentences.readingspace.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sh.threesentences.common.entity.BaseEntity;
 import com.sh.threesentences.common.enums.OpenType;
 import java.util.List;
@@ -53,6 +54,7 @@ public class ReadingSpace extends BaseEntity {
     private String profileImageUrl;
 
     @OneToMany(mappedBy = "readingSpace")
+    @JsonManagedReference
     private List<UserReadingSpaceMapping> userReadingSpaceMappingList;
 
 
