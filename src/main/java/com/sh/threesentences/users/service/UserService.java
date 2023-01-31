@@ -33,7 +33,7 @@ public class UserService {
         User user = userRequestDto.toEntity(PasswordEncoder.encrypt(userRequestDto.getPassword()));
         User savedUser = userRepository.save(user);
 
-        readingSpaceService.save(new ReadingSpaceRequestDto("MyReadingSpace", "", OpenType.PUBLIC, null), savedUser);
+        readingSpaceService.create(new ReadingSpaceRequestDto("MyReadingSpace", "", OpenType.PUBLIC, null), savedUser);
 
         return UserResponseDto.fromEntity(savedUser);
     }
@@ -75,6 +75,12 @@ public class UserService {
      * @return 사용자 엔티티
      */
     private User findById(long id) {
+        return userRepository.findById(id)
+            .orElseThrow(UserNotFoundException::new);
+    }
+
+    // TODO: 일시적으로 사용자 정보를 얻기 위해 만들어 놓은 메소드. 로그인 기능 이후 삭제
+    public User findByIdTemp(long id) {
         return userRepository.findById(id)
             .orElseThrow(UserNotFoundException::new);
     }

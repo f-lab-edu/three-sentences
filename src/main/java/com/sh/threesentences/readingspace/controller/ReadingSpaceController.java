@@ -1,11 +1,17 @@
 package com.sh.threesentences.readingspace.controller;
 
+import com.sh.threesentences.readingspace.dto.ReadingSpaceRequestDto;
+import com.sh.threesentences.readingspace.dto.ReadingSpaceResponseDto;
 import com.sh.threesentences.readingspace.entity.ReadingSpace;
 import com.sh.threesentences.readingspace.service.ReadingSpaceService;
+import com.sh.threesentences.users.entity.User;
+import com.sh.threesentences.users.service.UserService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class ReadingSpaceController {
 
     private final ReadingSpaceService readingSpaceService;
+
+    private final UserService userService;
 
 
     /**
@@ -28,4 +36,21 @@ public class ReadingSpaceController {
     public List<ReadingSpace> getPublicReadingSpaces() {
         return readingSpaceService.getPublicReadingSpaces();
     }
+
+    /**
+     * ReadingSpace를 생성합니다.
+     *
+     * @param readingSpaceRequestDto 요청 DTO
+     * @return 생성된 ReadingSpace 정보
+     */
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("")
+    public ReadingSpaceResponseDto createReadingSpace(@RequestBody ReadingSpaceRequestDto readingSpaceRequestDto) {
+
+        // TODO: 임시 사용자 조회
+        User tempUser = userService.findByIdTemp(1L);
+        return readingSpaceService.create(readingSpaceRequestDto, tempUser);
+    }
+
+
 }

@@ -23,7 +23,7 @@ public class ReadingSpaceService {
 
     private final UserReadingSpaceRepository userReadingSpaceRepository;
 
-    public ReadingSpaceResponseDto save(ReadingSpaceRequestDto readingSpaceRequestDto, User user) {
+    public ReadingSpaceResponseDto create(ReadingSpaceRequestDto readingSpaceRequestDto, User user) {
         ReadingSpace savedReadingSpace = readingSpaceRepository.save(readingSpaceRequestDto.toEntity());
 
         // TODO: 로그인한 사용자의 정보를 조회해서 User 엔티티를 UserReadingSpaceMapping에 추가해줘야함.
