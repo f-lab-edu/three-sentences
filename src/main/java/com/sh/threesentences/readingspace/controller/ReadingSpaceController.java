@@ -38,6 +38,16 @@ public class ReadingSpaceController {
     }
 
     /**
+     * 사용자가 속한 ReadingSpace를 조회합니다.
+     * @return ReadingSpace 리스트
+     */
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/me")
+    public List<ReadingSpace> getMyReadingSpaces() {
+        return readingSpaceService.getMyReadingSpaces();
+    }
+
+    /**
      * ReadingSpace를 생성합니다.
      *
      * @param readingSpaceRequestDto 요청 DTO

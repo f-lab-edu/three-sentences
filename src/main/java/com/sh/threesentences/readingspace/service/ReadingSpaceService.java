@@ -10,6 +10,7 @@ import com.sh.threesentences.readingspace.repository.ReadingSpaceRepository;
 import com.sh.threesentences.readingspace.repository.UserReadingSpaceRepository;
 import com.sh.threesentences.users.entity.User;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -43,6 +44,15 @@ public class ReadingSpaceService {
             -> new IllegalStateException("존재하지 않는 ReadingSpace 입니다."));
         readingSpace.update(readingSpaceRequestDto);
         return ReadingSpaceResponseDto.fromEntity(readingSpace);
+    }
 
+    public List<ReadingSpace> getMyReadingSpaces() {
+
+        // TODO: 로그인한 사용자의 id를 조회할 수 있게 수정
+        Long id = 1L;
+        return userReadingSpaceRepository.findByUserId(id)
+            .stream()
+            .map(UserReadingSpaceMapping::getReadingSpace)
+            .collect(Collectors.toList());
     }
 }

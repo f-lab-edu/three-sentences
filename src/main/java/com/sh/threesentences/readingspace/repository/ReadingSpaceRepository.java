@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ReadingSpaceRepository extends JpaRepository<ReadingSpace, Long> {
 
-    public List<ReadingSpace> findAllByOpenType(OpenType openType);
+    List<ReadingSpace> findAllByOpenType(OpenType openType);
 
 }
