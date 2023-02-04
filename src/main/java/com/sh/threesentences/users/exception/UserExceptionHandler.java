@@ -24,7 +24,7 @@ public class UserExceptionHandler {
     @ExceptionHandler(EmailDuplicateException.class)
     @ResponseStatus(code = BAD_REQUEST)
     public ErrorResponseDto handleEmailDuplicateException(EmailDuplicateException ex) {
-        return new ErrorResponseDto(ex.getMessage());
+        return new ErrorResponseDto(BAD_REQUEST, ex.getMessage());
     }
 
     /**
@@ -36,7 +36,7 @@ public class UserExceptionHandler {
     @ExceptionHandler(UserNotFoundException.class)
     @ResponseStatus(code = BAD_REQUEST)
     public ErrorResponseDto handleUserNotFoundException(UserNotFoundException ex) {
-        return new ErrorResponseDto(ex.getMessage());
+        return new ErrorResponseDto(BAD_REQUEST, ex.getMessage());
     }
 
     /**
@@ -54,6 +54,6 @@ public class UserExceptionHandler {
             .map(DefaultMessageSourceResolvable::getDefaultMessage)
             .collect(Collectors.toList());
 
-        return new ErrorResponseDto(errors.toString());
+        return new ErrorResponseDto(BAD_REQUEST, errors.toString());
     }
 }

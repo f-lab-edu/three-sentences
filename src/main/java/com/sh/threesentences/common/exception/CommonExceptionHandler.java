@@ -16,7 +16,7 @@ public class CommonExceptionHandler {
     @ExceptionHandler(IllegalStateException.class)
     @ResponseStatus(code = BAD_REQUEST)
     public ErrorResponseDto handleIllegalStatesException(IllegalStateException ex) {
-        return new ErrorResponseDto(ex.getMessage());
+        return new ErrorResponseDto(BAD_REQUEST, ex.getMessage());
     }
 
     /**
@@ -27,7 +27,7 @@ public class CommonExceptionHandler {
     @ExceptionHandler(InvalidFormatException.class)
     @ResponseStatus(code= BAD_REQUEST)
     public ErrorResponseDto handleMethodArgumentNotValid() {
-        return new ErrorResponseDto("입력 값이 유효하지 않습니다. ");
+        return new ErrorResponseDto(ErrorCode.INVALID_VALUE_REQUEST.getHttpStatus(), ErrorCode.INVALID_VALUE_REQUEST.getMessage());
     }
 
 }
