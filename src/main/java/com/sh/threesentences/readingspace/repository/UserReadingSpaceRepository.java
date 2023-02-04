@@ -9,4 +9,6 @@ public interface UserReadingSpaceRepository extends JpaRepository<UserReadingSpa
 
     List<UserReadingSpaceMapping> findByUserId(Long id);
 
+    List<UserReadingSpaceMapping> findByReadingSpaceId(Long id);
+
 }
