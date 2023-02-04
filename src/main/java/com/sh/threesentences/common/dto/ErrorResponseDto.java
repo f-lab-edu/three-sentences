@@ -10,10 +10,14 @@ public class ErrorResponseDto {
      * 예외 메시지
      */
     private HttpStatus httpStatus;
+
+    private int httpStatusCode;
+
     private String errorMessage;
 
-    public ErrorResponseDto(HttpStatus httpStatus, String errorMessage) {
+    public ErrorResponseDto(HttpStatus httpStatus, int httpStatusCode, String errorMessage) {
         this.httpStatus = httpStatus;
+        this.httpStatusCode = httpStatusCode;
         this.errorMessage = errorMessage;
     }
 }
