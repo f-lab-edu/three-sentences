@@ -3,6 +3,7 @@ package com.sh.threesentences.readingspace.entity;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sh.threesentences.common.entity.BaseEntity;
 import com.sh.threesentences.common.enums.OpenType;
+import com.sh.threesentences.readingspace.dto.ReadingSpaceRequestDto;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -57,7 +58,6 @@ public class ReadingSpace extends BaseEntity {
     @JsonManagedReference
     private List<UserReadingSpaceMapping> userReadingSpaceMappingList;
 
-
     @Builder
     public ReadingSpace(Long id, String name, String description, OpenType openType, String profileImageUrl) {
         this.id = id;
@@ -67,4 +67,10 @@ public class ReadingSpace extends BaseEntity {
         this.profileImageUrl = profileImageUrl;
     }
 
+    public void update(ReadingSpaceRequestDto readingSpaceRequestDto) {
+        this.name = readingSpaceRequestDto.getName();
+        this.description = readingSpaceRequestDto.getDescription();
+        this.openType = readingSpaceRequestDto.getOpenType();
+        this.profileImageUrl = readingSpaceRequestDto.getProfileImageUrl();
+    }
 }

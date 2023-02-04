@@ -37,4 +37,12 @@ public class ReadingSpaceService {
     public List<ReadingSpace> getPublicReadingSpaces() {
         return readingSpaceRepository.findAllByOpenType(OpenType.PUBLIC);
     }
+
+    public ReadingSpaceResponseDto update(ReadingSpaceRequestDto readingSpaceRequestDto, Long id) {
+        ReadingSpace readingSpace = readingSpaceRepository.findById(id).orElseThrow(()
+            -> new IllegalStateException("존재하지 않는 ReadingSpace 입니다."));
+        readingSpace.update(readingSpaceRequestDto);
+        return ReadingSpaceResponseDto.fromEntity(readingSpace);
+
+    }
 }

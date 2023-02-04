@@ -10,6 +10,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +25,6 @@ public class ReadingSpaceController {
     private final ReadingSpaceService readingSpaceService;
 
     private final UserService userService;
-
 
     /**
      * 애플리케이션 내의 공개된 전체 ReadingSpace를 조회한다.
@@ -52,5 +52,9 @@ public class ReadingSpaceController {
         return readingSpaceService.create(readingSpaceRequestDto, tempUser);
     }
 
-
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping("/{id}/update")
+    public ReadingSpaceResponseDto updateReadingSpace(@PathVariable("id") Long id, @RequestBody ReadingSpaceRequestDto readingSpaceRequestDto) {
+        return readingSpaceService.update(readingSpaceRequestDto, id);
+    }
 }
