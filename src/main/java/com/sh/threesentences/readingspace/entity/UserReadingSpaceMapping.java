@@ -39,7 +39,8 @@ public class UserReadingSpaceMapping {
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
 
-    public static UserReadingSpaceMapping createUserReadingSpaceMapping(User user, ReadingSpace readingSpace, UserRole role) {
+    public static UserReadingSpaceMapping createUserReadingSpaceMapping(User user, ReadingSpace readingSpace,
+        UserRole role) {
         UserReadingSpaceMapping userReadingSpaceMapping = new UserReadingSpaceMapping();
         userReadingSpaceMapping.setId(new UserReadingSpaceMappingKey(user.getId(), readingSpace.getId()));
         userReadingSpaceMapping.setUser(user);
