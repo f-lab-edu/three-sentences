@@ -27,35 +27,20 @@ public class ReadingSpaceController {
 
     private final UserService userService;
 
-    /**
-     * 애플리케이션 내의 공개된 전체 ReadingSpace를 조회한다.
-     *
-     * @return ReadingSpace 리스트
-     */
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("")
+    @GetMapping
     public List<ReadingSpace> getPublicReadingSpaces() {
         return readingSpaceService.getPublicReadingSpaces();
     }
 
-    /**
-     * 사용자가 속한 ReadingSpace를 조회합니다.
-     * @return ReadingSpace 리스트
-     */
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/me")
     public List<ReadingSpace> getMyReadingSpaces() {
         return readingSpaceService.getMyReadingSpaces();
     }
 
-    /**
-     * ReadingSpace를 생성합니다.
-     *
-     * @param readingSpaceRequestDto 요청 DTO
-     * @return 생성된 ReadingSpace 정보
-     */
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("")
+    @PostMapping
     public ReadingSpaceResponseDto createReadingSpace(@RequestBody ReadingSpaceRequestDto readingSpaceRequestDto) {
 
         // TODO: 임시 사용자 조회
