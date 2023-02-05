@@ -1,9 +1,9 @@
 package com.sh.threesentences.readingspace.entity.fcc;
 
-import static com.sh.threesentences.common.exception.ErrorCode.MEMBER_IS_STILL_IN_SPACE;
-import static com.sh.threesentences.common.exception.ErrorCode.NO_ADMIN_IN_SPACE;
+import static com.sh.threesentences.readingspace.exception.ReadingSpaceErrorCode.MEMBER_IS_STILL_IN_SPACE;
+import static com.sh.threesentences.readingspace.exception.ReadingSpaceErrorCode.NO_ADMIN_IN_SPACE;
+import static com.sh.threesentences.readingspace.exception.ReadingSpaceErrorCode.READING_SPACE_NOT_FOUND;
 
-import com.sh.threesentences.common.exception.ErrorCode;
 import com.sh.threesentences.readingspace.entity.UserReadingSpaceMapping;
 import com.sh.threesentences.readingspace.enums.UserRole;
 import java.util.List;
@@ -22,7 +22,7 @@ public class ReadingSpaceMembers {
         } else if (hasMemberEqualToOne() && memberIsNotAdmin()) {
             throw new IllegalStateException(NO_ADMIN_IN_SPACE.getMessage());
         } else {
-            throw new IllegalStateException(ErrorCode.READING_SPACE_NOT_FOUND.getMessage());
+            throw new IllegalStateException(READING_SPACE_NOT_FOUND.getMessage());
         }
     }
 

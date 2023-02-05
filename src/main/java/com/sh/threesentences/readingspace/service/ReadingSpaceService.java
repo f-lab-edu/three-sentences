@@ -1,7 +1,8 @@
 package com.sh.threesentences.readingspace.service;
 
+import static com.sh.threesentences.readingspace.exception.ReadingSpaceErrorCode.READING_SPACE_NOT_FOUND;
+
 import com.sh.threesentences.common.enums.OpenType;
-import com.sh.threesentences.common.exception.ErrorCode;
 import com.sh.threesentences.readingspace.dto.ReadingSpaceRequestDto;
 import com.sh.threesentences.readingspace.dto.ReadingSpaceResponseDto;
 import com.sh.threesentences.readingspace.entity.ReadingSpace;
@@ -43,7 +44,7 @@ public class ReadingSpaceService {
 
     public ReadingSpaceResponseDto update(ReadingSpaceRequestDto readingSpaceRequestDto, Long id) {
         ReadingSpace readingSpace = readingSpaceRepository.findById(id).orElseThrow(()
-            -> new IllegalStateException(ErrorCode.READING_SPACE_NOT_FOUND.getMessage()));
+            -> new IllegalStateException(READING_SPACE_NOT_FOUND.getMessage()));
         readingSpace.update(readingSpaceRequestDto);
         return ReadingSpaceResponseDto.fromEntity(readingSpace);
     }
