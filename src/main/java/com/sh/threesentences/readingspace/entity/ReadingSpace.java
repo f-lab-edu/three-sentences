@@ -56,7 +56,7 @@ public class ReadingSpace extends BaseEntity {
 
     @OneToMany(mappedBy = "readingSpace")
     @JsonManagedReference
-    private List<UserReadingSpaceMapping> userReadingSpaceMappingList;
+    private List<UserReadingSpaceMapping> userReadingSpaceMapping;
 
     @Builder
     public ReadingSpace(Long id, String name, String description, OpenType openType, String profileImageUrl) {
