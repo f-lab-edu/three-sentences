@@ -50,7 +50,8 @@ public class ReadingSpaceController {
 
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/{id}/update")
-    public ReadingSpaceResponseDto updateReadingSpace(@PathVariable("id") Long id, @RequestBody ReadingSpaceRequestDto readingSpaceRequestDto) {
+    public ReadingSpaceResponseDto updateReadingSpace(@PathVariable("id") Long id,
+        @RequestBody ReadingSpaceRequestDto readingSpaceRequestDto) {
         return readingSpaceService.update(readingSpaceRequestDto, id);
     }
 
