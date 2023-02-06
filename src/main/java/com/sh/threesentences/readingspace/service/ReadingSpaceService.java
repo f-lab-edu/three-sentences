@@ -50,7 +50,6 @@ public class ReadingSpaceService {
     }
 
     public List<ReadingSpace> getMyReadingSpaces() {
-
         // TODO: 로그인한 사용자의 id를 조회할 수 있게 수정
         Long id = 1L;
         return userReadingSpaceRepository.findByUserId(id)
@@ -58,10 +57,9 @@ public class ReadingSpaceService {
             .map(UserReadingSpaceMapping::getReadingSpace)
             .collect(Collectors.toList());
     }
+
     public void delete(Long id) {
-
         // TODO: 사용자 정보 조회 후, 어드민 권한인 경우에만 삭제 기능을 진행할 수 있게 변경
-
         List<UserReadingSpaceMapping> membersOfReadingSpace = userReadingSpaceRepository.findByReadingSpaceId(id);
         ReadingSpaceMembers readingSpaceMembers = ReadingSpaceMembers.fromEntity(membersOfReadingSpace);
         readingSpaceMembers.checkSpaceDeleteCondition();
