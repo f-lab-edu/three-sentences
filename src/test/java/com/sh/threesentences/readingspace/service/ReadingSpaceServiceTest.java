@@ -178,6 +178,8 @@ class ReadingSpaceServiceTest {
             );
 
             readingSpaceService.delete(READING_SPACE_ID);
+            boolean deleted = USER_READING_MAPPINGS_FOR_DELETE_CONDITION_MET.get(0).getReadingSpace().isDeleted();
+            assertThat(deleted).isTrue();
         }
 
         @DisplayName("삭제할 ReadingSpace가 없는 경우, 예외를 던진다.")
