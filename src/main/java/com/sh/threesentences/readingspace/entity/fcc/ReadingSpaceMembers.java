@@ -21,9 +21,13 @@ public class ReadingSpaceMembers {
             throw new IllegalStateException(MEMBER_IS_STILL_IN_SPACE.getMessage());
         } else if (hasMemberEqualToOne() && memberIsNotAdmin()) {
             throw new IllegalStateException(NO_ADMIN_IN_SPACE.getMessage());
-        } else {
+        } else if (hasNoMember()) {
             throw new IllegalStateException(READING_SPACE_NOT_FOUND.getMessage());
         }
+    }
+
+    private boolean hasNoMember() {
+        return readingSpaceMembers.isEmpty();
     }
 
     private boolean hasMemberEqualToOne() {
@@ -33,6 +37,7 @@ public class ReadingSpaceMembers {
     private boolean memberIsNotAdmin() {
         return readingSpaceMembers.get(0).getUserRole() != UserRole.ADMIN;
     }
+
 
     private boolean hasMembersGreaterThanOne() {
         return readingSpaceMembers.size() >= 2;
