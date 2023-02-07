@@ -38,8 +38,13 @@ public class ReadingSpaceService {
         return ReadingSpaceResponseDto.fromEntity(savedReadingSpace);
     }
 
-    public List<ReadingSpace> getPublicReadingSpaces() {
-        return readingSpaceRepository.findAllByOpenType(OpenType.PUBLIC);
+    public List<ReadingSpaceResponseDto> getPublicReadingSpaces() {
+        List<ReadingSpace> allPublicReadingSpaces = readingSpaceRepository.findAllByOpenType(OpenType.PUBLIC);
+
+        return allPublicReadingSpaces
+            .stream()
+            .map(ReadingSpaceResponseDto::fromEntity)
+            .collect(Collectors.toList());
     }
 
     public ReadingSpaceResponseDto update(ReadingSpaceRequestDto readingSpaceRequestDto, Long id) {
@@ -49,12 +54,13 @@ public class ReadingSpaceService {
         return ReadingSpaceResponseDto.fromEntity(readingSpace);
     }
 
-    public List<ReadingSpace> getMyReadingSpaces() {
+    public List<ReadingSpaceResponseDto> getMyReadingSpaces() {
         // TODO: 로그인한 사용자의 id를 조회할 수 있게 수정
         Long id = 1L;
         return userReadingSpaceRepository.findByUserId(id)
             .stream()
             .map(UserReadingSpaceMapping::getReadingSpace)
+            .map(ReadingSpaceResponseDto::fromEntity)
             .collect(Collectors.toList());
     }
 

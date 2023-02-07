@@ -1,6 +1,5 @@
 package com.sh.threesentences.readingspace.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.sh.threesentences.readingspace.enums.UserRole;
 import com.sh.threesentences.users.entity.User;
 import javax.persistence.Column;
@@ -26,13 +25,11 @@ public class UserReadingSpaceMapping {
     @ManyToOne
     @MapsId("userId")
     @JoinColumn(name = "user_id")
-    @JsonBackReference
     private User user;
 
     @ManyToOne
     @MapsId("readingSpaceId")
     @JoinColumn(name = "readingspace_id")
-    @JsonBackReference
     private ReadingSpace readingSpace;
 
     @Column

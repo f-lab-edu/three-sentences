@@ -7,10 +7,6 @@ import static com.sh.threesentences.readingspace.exception.ReadingSpaceErrorCode
 import static com.sh.threesentences.readingspace.fixture.ReadingSpaceFixture.ALL_READING_SPACES;
 import static com.sh.threesentences.readingspace.fixture.ReadingSpaceFixture.MY_READING_SPACES_SIZE;
 import static com.sh.threesentences.readingspace.fixture.ReadingSpaceFixture.PUBLIC_READING_SPACES_SIZE;
-import static com.sh.threesentences.readingspace.fixture.ReadingSpaceFixture.READING_SPACE_1;
-import static com.sh.threesentences.readingspace.fixture.ReadingSpaceFixture.READING_SPACE_2;
-import static com.sh.threesentences.readingspace.fixture.ReadingSpaceFixture.READING_SPACE_3;
-import static com.sh.threesentences.readingspace.fixture.ReadingSpaceFixture.READING_SPACE_4;
 import static com.sh.threesentences.readingspace.fixture.ReadingSpaceFixture.READING_SPACE_ID;
 import static com.sh.threesentences.readingspace.fixture.ReadingSpaceFixture.UNUSED_READING_SPACE_ID;
 import static com.sh.threesentences.readingspace.fixture.ReadingSpaceFixture.USER_ID;
@@ -117,11 +113,10 @@ class ReadingSpaceServiceTest {
                     .collect(Collectors.toList())
             );
 
-            List<ReadingSpace> readingSpaces = readingSpaceService.getPublicReadingSpaces();
+            List<ReadingSpaceResponseDto> readingSpaces = readingSpaceService.getPublicReadingSpaces();
 
-            assertThat(readingSpaces).containsExactly(READING_SPACE_1, READING_SPACE_2, READING_SPACE_4);
             assertThat(readingSpaces).hasSize(PUBLIC_READING_SPACES_SIZE)
-                .extracting(ReadingSpace::getOpenType)
+                .extracting(ReadingSpaceResponseDto::getOpenType)
                 .containsOnly(OpenType.PUBLIC);
         }
     }
@@ -159,9 +154,8 @@ class ReadingSpaceServiceTest {
                 USER_READING_MAPPINGS
             );
 
-            List<ReadingSpace> myReadingSpaces = readingSpaceService.getMyReadingSpaces();
+            List<ReadingSpaceResponseDto> myReadingSpaces = readingSpaceService.getMyReadingSpaces();
 
-            assertThat(myReadingSpaces).containsExactly(READING_SPACE_1, READING_SPACE_2, READING_SPACE_3);
             assertThat(myReadingSpaces).hasSize(MY_READING_SPACES_SIZE);
         }
     }

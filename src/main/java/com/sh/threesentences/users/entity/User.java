@@ -1,6 +1,5 @@
 package com.sh.threesentences.users.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sh.threesentences.common.entity.BaseEntity;
 import com.sh.threesentences.readingspace.entity.UserReadingSpaceMapping;
 import com.sh.threesentences.users.enums.MembershipType;
@@ -28,7 +27,8 @@ public class User extends BaseEntity {
     /**
      * 엔티티 식별자
      */
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     /**
@@ -50,16 +50,13 @@ public class User extends BaseEntity {
     private String password;
 
     /**
-     * 사용자 멤버십 타입
-     * FREE, BASIC, PREMIUM 3가지 타입이 존재
-     * 초기 디폴드값은 FREE로 세팅
+     * 사용자 멤버십 타입 FREE, BASIC, PREMIUM 3가지 타입이 존재 초기 디폴드값은 FREE로 세팅
      */
     @Column
     @Enumerated(EnumType.STRING)
     private MembershipType membership = MembershipType.FREE;
 
     @OneToMany(mappedBy = "user")
-    @JsonManagedReference
     private List<UserReadingSpaceMapping> userReadingSpaceMappingList;
 
     @Builder

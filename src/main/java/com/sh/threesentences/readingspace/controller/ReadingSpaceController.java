@@ -2,7 +2,6 @@ package com.sh.threesentences.readingspace.controller;
 
 import com.sh.threesentences.readingspace.dto.ReadingSpaceRequestDto;
 import com.sh.threesentences.readingspace.dto.ReadingSpaceResponseDto;
-import com.sh.threesentences.readingspace.entity.ReadingSpace;
 import com.sh.threesentences.readingspace.service.ReadingSpaceService;
 import com.sh.threesentences.users.entity.User;
 import com.sh.threesentences.users.service.UserService;
@@ -29,13 +28,13 @@ public class ReadingSpaceController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
-    public List<ReadingSpace> getPublicReadingSpaces() {
+    public List<ReadingSpaceResponseDto> getPublicReadingSpaces() {
         return readingSpaceService.getPublicReadingSpaces();
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/me")
-    public List<ReadingSpace> getMyReadingSpaces() {
+    public List<ReadingSpaceResponseDto> getMyReadingSpaces() {
         return readingSpaceService.getMyReadingSpaces();
     }
 
