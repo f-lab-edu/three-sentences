@@ -1,25 +1,22 @@
 package com.sh.threesentences.readingspace.entity.fcc;
 
-import static com.sh.threesentences.readingspace.exception.ReadingSpaceErrorCode.MEMBER_IS_STILL_IN_SPACE;
 import static com.sh.threesentences.readingspace.exception.ReadingSpaceErrorCode.NO_ADMIN_IN_SPACE;
 import static com.sh.threesentences.readingspace.exception.ReadingSpaceErrorCode.READING_SPACE_NOT_FOUND;
 
-import com.sh.threesentences.readingspace.entity.UserReadingSpaceMapping;
+import com.sh.threesentences.readingspace.entity.ReadingSpaceMemberRole;
 import com.sh.threesentences.readingspace.enums.UserRole;
 import java.util.List;
 
 public class ReadingSpaceMembers {
 
-    private List<UserReadingSpaceMapping> readingSpaceMembers;
+    private final List<ReadingSpaceMemberRole> readingSpaceMembers;
 
-    public ReadingSpaceMembers(List<UserReadingSpaceMapping> readingSpaceMembers) {
+    public ReadingSpaceMembers(List<ReadingSpaceMemberRole> readingSpaceMembers) {
         this.readingSpaceMembers = readingSpaceMembers;
     }
 
     public void checkSpaceDeleteCondition() {
-        if (hasMembersGreaterThanOne()) {
-            throw new IllegalStateException(MEMBER_IS_STILL_IN_SPACE.getMessage());
-        } else if (hasMemberEqualToOne() && memberIsNotAdmin()) {
+        if (hasMemberEqualToOne() && memberIsNotAdmin()) {
             throw new IllegalStateException(NO_ADMIN_IN_SPACE.getMessage());
         } else if (hasNoMember()) {
             throw new IllegalStateException(READING_SPACE_NOT_FOUND.getMessage());
@@ -38,13 +35,8 @@ public class ReadingSpaceMembers {
         return readingSpaceMembers.get(0).getUserRole() != UserRole.ADMIN;
     }
 
-
-    private boolean hasMembersGreaterThanOne() {
-        return readingSpaceMembers.size() >= 2;
-    }
-
-    public static ReadingSpaceMembers fromEntity(List<UserReadingSpaceMapping> userReadingSpaceMappings) {
-        return new ReadingSpaceMembers(userReadingSpaceMappings);
+    public static ReadingSpaceMembers fromEntity(List<ReadingSpaceMemberRole> readingSpaceMemberRoles) {
+        return new ReadingSpaceMembers(readingSpaceMemberRoles);
     }
 
 

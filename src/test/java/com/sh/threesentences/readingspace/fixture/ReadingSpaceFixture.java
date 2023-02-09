@@ -4,7 +4,7 @@ import com.sh.threesentences.common.enums.OpenType;
 import com.sh.threesentences.readingspace.dto.ReadingSpaceRequestDto;
 import com.sh.threesentences.readingspace.dto.ReadingSpaceResponseDto;
 import com.sh.threesentences.readingspace.entity.ReadingSpace;
-import com.sh.threesentences.readingspace.entity.UserReadingSpaceMapping;
+import com.sh.threesentences.readingspace.entity.ReadingSpaceMemberRole;
 import com.sh.threesentences.readingspace.enums.UserRole;
 import com.sh.threesentences.users.entity.User;
 import com.sh.threesentences.users.enums.MembershipType;
@@ -91,27 +91,27 @@ public class ReadingSpaceFixture {
         .stream()
         .filter(s -> s.getOpenType().equals(OpenType.PUBLIC)).count();
 
-    public static List<UserReadingSpaceMapping> USER_READING_MAPPINGS = List.of(
-        UserReadingSpaceMapping.createUserReadingSpaceMapping(USER_1, READING_SPACE_1, UserRole.ADMIN),
-        UserReadingSpaceMapping.createUserReadingSpaceMapping(USER_1, READING_SPACE_2, UserRole.REDINGMATE),
-        UserReadingSpaceMapping.createUserReadingSpaceMapping(USER_1, READING_SPACE_3, UserRole.REDINGMATE)
+    public static List<ReadingSpaceMemberRole> USER_READING_MAPPINGS = List.of(
+        new ReadingSpaceMemberRole(USER_1, READING_SPACE_1, UserRole.ADMIN),
+        new ReadingSpaceMemberRole(USER_1, READING_SPACE_2, UserRole.REDINGMATE),
+        new ReadingSpaceMemberRole(USER_1, READING_SPACE_3, UserRole.REDINGMATE)
     );
 
     public static int MY_READING_SPACES_SIZE = (int) USER_READING_MAPPINGS
         .stream()
         .filter(s -> s.getUser().getId().equals(USER_ID)).count();
 
-    public static List<UserReadingSpaceMapping> USER_READING_MAPPINGS_FOR_DELETE_CONDITION_MET = List.of(
-        UserReadingSpaceMapping.createUserReadingSpaceMapping(USER_1, READING_SPACE_1, UserRole.ADMIN)
+    public static List<ReadingSpaceMemberRole> USER_READING_MAPPINGS_FOR_DELETE_CONDITION_MET = List.of(
+        new ReadingSpaceMemberRole(USER_1, READING_SPACE_1, UserRole.ADMIN)
     );
 
 
-    public static List<UserReadingSpaceMapping> USER_READING_MAPPINGS_FOR_DELETE_1 = List.of(
-        UserReadingSpaceMapping.createUserReadingSpaceMapping(USER_1, READING_SPACE_1, UserRole.ADMIN),
-        UserReadingSpaceMapping.createUserReadingSpaceMapping(USER_2, READING_SPACE_1, UserRole.REDINGMATE)
+    public static List<ReadingSpaceMemberRole> USER_READING_MAPPINGS_FOR_DELETE_1 = List.of(
+        new ReadingSpaceMemberRole(USER_1, READING_SPACE_1, UserRole.ADMIN),
+        new ReadingSpaceMemberRole(USER_2, READING_SPACE_1, UserRole.REDINGMATE)
     );
 
-    public static List<UserReadingSpaceMapping> USER_READING_MAPPINGS_FOR_DELETE_2 = List.of(
-        UserReadingSpaceMapping.createUserReadingSpaceMapping(USER_1, READING_SPACE_1, UserRole.REDINGMATE)
+    public static List<ReadingSpaceMemberRole> USER_READING_MAPPINGS_FOR_DELETE_2 = List.of(
+        new ReadingSpaceMemberRole(USER_1, READING_SPACE_1, UserRole.REDINGMATE)
     );
 }

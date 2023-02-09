@@ -1,12 +1,13 @@
 package com.sh.threesentences.readingspace.service;
 
+import static com.sh.threesentences.readingspace.exception.ReadingSpaceErrorCode.MEMBER_IS_STILL_IN_SPACE;
 import static com.sh.threesentences.readingspace.exception.ReadingSpaceErrorCode.READING_SPACE_NOT_FOUND;
 
 import com.sh.threesentences.common.enums.OpenType;
 import com.sh.threesentences.readingspace.dto.ReadingSpaceRequestDto;
 import com.sh.threesentences.readingspace.dto.ReadingSpaceResponseDto;
 import com.sh.threesentences.readingspace.entity.ReadingSpace;
-import com.sh.threesentences.readingspace.entity.UserReadingSpaceMapping;
+import com.sh.threesentences.readingspace.entity.ReadingSpaceMemberRole;
 import com.sh.threesentences.readingspace.entity.fcc.ReadingSpaceMembers;
 import com.sh.threesentences.readingspace.enums.UserRole;
 import com.sh.threesentences.readingspace.repository.ReadingSpaceRepository;
@@ -31,9 +32,9 @@ public class ReadingSpaceService {
         ReadingSpace savedReadingSpace = readingSpaceRepository.save(readingSpaceRequestDto.toEntity());
 
         // TODO: 로그인한 사용자의 정보를 조회해서 User 엔티티를 UserReadingSpaceMapping에 추가해줘야함.
-        UserReadingSpaceMapping userReadingSpaceMapping = UserReadingSpaceMapping.createUserReadingSpaceMapping(user,
+        ReadingSpaceMemberRole readingSpaceMemberRole = new ReadingSpaceMemberRole(user,
             savedReadingSpace, UserRole.ADMIN);
-        userReadingSpaceRepository.save(userReadingSpaceMapping);
+        userReadingSpaceRepository.save(readingSpaceMemberRole);
 
         return ReadingSpaceResponseDto.fromEntity(savedReadingSpace);
     }
@@ -59,18 +60,28 @@ public class ReadingSpaceService {
         Long id = 1L;
         return userReadingSpaceRepository.findByUserId(id)
             .stream()
-            .map(UserReadingSpaceMapping::getReadingSpace)
+            .map(ReadingSpaceMemberRole::getReadingSpace)
             .map(ReadingSpaceResponseDto::fromEntity)
             .collect(Collectors.toList());
     }
 
     public void delete(Long id) {
         // TODO: 사용자 정보 조회 후, 어드민 권한인 경우에만 삭제 기능을 진행할 수 있게 변경
-        List<UserReadingSpaceMapping> membersOfReadingSpace = userReadingSpaceRepository.findByReadingSpaceId(id);
+
+        int memberCount = userReadingSpaceRepository.countByReadingSpaceId(id);
+        if (hasMembersGreaterThanOne(memberCount)) {
+            throw new IllegalStateException(MEMBER_IS_STILL_IN_SPACE.getMessage());
+        }
+
+        List<ReadingSpaceMemberRole> membersOfReadingSpace = userReadingSpaceRepository.findByReadingSpaceId(id);
         ReadingSpaceMembers readingSpaceMembers = ReadingSpaceMembers.fromEntity(membersOfReadingSpace);
         readingSpaceMembers.checkSpaceDeleteCondition();
 
         ReadingSpace readingSpace = membersOfReadingSpace.get(0).getReadingSpace();
         readingSpace.delete();
+    }
+
+    private boolean hasMembersGreaterThanOne(int memberCount) {
+        return memberCount >= 2;
     }
 }

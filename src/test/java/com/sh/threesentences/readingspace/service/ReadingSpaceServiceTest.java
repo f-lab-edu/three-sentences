@@ -11,7 +11,6 @@ import static com.sh.threesentences.readingspace.fixture.ReadingSpaceFixture.REA
 import static com.sh.threesentences.readingspace.fixture.ReadingSpaceFixture.UNUSED_READING_SPACE_ID;
 import static com.sh.threesentences.readingspace.fixture.ReadingSpaceFixture.USER_ID;
 import static com.sh.threesentences.readingspace.fixture.ReadingSpaceFixture.USER_READING_MAPPINGS;
-import static com.sh.threesentences.readingspace.fixture.ReadingSpaceFixture.USER_READING_MAPPINGS_FOR_DELETE_1;
 import static com.sh.threesentences.readingspace.fixture.ReadingSpaceFixture.USER_READING_MAPPINGS_FOR_DELETE_2;
 import static com.sh.threesentences.readingspace.fixture.ReadingSpaceFixture.USER_READING_MAPPINGS_FOR_DELETE_CONDITION_MET;
 import static com.sh.threesentences.readingspace.fixture.ReadingSpaceFixture.VALID_READING_SPACE_REQUEST;
@@ -189,8 +188,8 @@ class ReadingSpaceServiceTest {
         @DisplayName("ReadingSpace에 다른 멤버가 존재하는 경우, 예외를 던진다.")
         @Test
         void delete_condition_not_met_1() {
-            given(userReadingSpaceRepository.findByReadingSpaceId(READING_SPACE_ID))
-                .willReturn(USER_READING_MAPPINGS_FOR_DELETE_1);
+            given(userReadingSpaceRepository.countByReadingSpaceId(READING_SPACE_ID))
+                .willReturn(3);
 
             assertThatThrownBy(() -> readingSpaceService.delete(READING_SPACE_ID))
                 .isInstanceOf(IllegalStateException.class)
