@@ -10,17 +10,16 @@ import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@Setter(AccessLevel.PRIVATE)
-public class UserReadingSpaceMapping {
+@NoArgsConstructor
+public class ReadingSpaceMemberRole {
 
     @EmbeddedId
-    UserReadingSpaceMappingKey id;
+    UserReadingSpaceMappingId id;
 
     @ManyToOne
     @MapsId("userId")
@@ -29,21 +28,18 @@ public class UserReadingSpaceMapping {
 
     @ManyToOne
     @MapsId("readingSpaceId")
-    @JoinColumn(name = "readingspace_id")
+    @JoinColumn(name = "reading_space_id")
     private ReadingSpace readingSpace;
 
     @Column
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
 
-    public static UserReadingSpaceMapping createUserReadingSpaceMapping(User user, ReadingSpace readingSpace,
-        UserRole role) {
-        UserReadingSpaceMapping userReadingSpaceMapping = new UserReadingSpaceMapping();
-        userReadingSpaceMapping.setId(new UserReadingSpaceMappingKey(user.getId(), readingSpace.getId()));
-        userReadingSpaceMapping.setUser(user);
-        userReadingSpaceMapping.setReadingSpace(readingSpace);
-        userReadingSpaceMapping.setUserRole(role);
-        return userReadingSpaceMapping;
+    public ReadingSpaceMemberRole(User user, ReadingSpace readingSpace, UserRole userRole) {
+        this.id = new UserReadingSpaceMappingId(user.getId(), readingSpace.getId());
+        this.user = user;
+        this.readingSpace = readingSpace;
+        this.userRole = userRole;
     }
 
 }

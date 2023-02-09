@@ -10,18 +10,19 @@ import lombok.NoArgsConstructor;
 @Embeddable
 @Getter
 @NoArgsConstructor
-public class UserReadingSpaceMappingKey implements Serializable {
+public class UserReadingSpaceMappingId implements Serializable {
 
     @Column(name = "user_id")
     Long userId;
 
-    @Column(name = "readingspace_id")
+    @Column(name = "reading_space_id")
     Long readingSpaceId;
 
-    public UserReadingSpaceMappingKey(Long userId, Long readingSpaceId) {
+    public UserReadingSpaceMappingId(Long userId, Long readingSpaceId) {
         this.userId = userId;
         this.readingSpaceId = readingSpaceId;
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -30,7 +31,7 @@ public class UserReadingSpaceMappingKey implements Serializable {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        UserReadingSpaceMappingKey that = (UserReadingSpaceMappingKey) o;
+        UserReadingSpaceMappingId that = (UserReadingSpaceMappingId) o;
         return Objects.equals(getUserId(), that.getUserId()) && Objects.equals(
             getReadingSpaceId(), that.getReadingSpaceId());
     }

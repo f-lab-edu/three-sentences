@@ -54,7 +54,7 @@ public class ReadingSpace extends BaseEntity {
     private String profileImageUrl;
 
     @OneToMany(mappedBy = "readingSpace")
-    private List<UserReadingSpaceMapping> userReadingSpaceMapping;
+    private List<ReadingSpaceMemberRole> readingSpaceMemberRole;
 
     @Builder
     public ReadingSpace(Long id, String name, String description, OpenType openType, String profileImageUrl) {
