@@ -1,8 +1,9 @@
 package com.sh.threesentences.users.entity;
 
 import com.sh.threesentences.common.entity.BaseEntity;
-import com.sh.threesentences.users.dto.UserResponseDto;
+import com.sh.threesentences.readingspace.entity.ReadingSpaceMemberRole;
 import com.sh.threesentences.users.enums.MembershipType;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -10,6 +11,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,7 +27,8 @@ public class User extends BaseEntity {
     /**
      * 엔티티 식별자
      */
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     /**
@@ -47,17 +50,14 @@ public class User extends BaseEntity {
     private String password;
 
     /**
-     * 사용자 멤버십 타입
-     * FREE, BASIC, PREMIUM 3가지 타입이 존재
-     * 초기 디폴드값은 FREE로 세팅
+     * 사용자 멤버십 타입 FREE, BASIC, PREMIUM 3가지 타입이 존재 초기 디폴드값은 FREE로 세팅
      */
     @Column
     @Enumerated(EnumType.STRING)
     private MembershipType membership = MembershipType.FREE;
 
-    public UserResponseDto toUserResponseDto() {
-        return new UserResponseDto(this.id, this.email, this.name, this.membership);
-    }
+    @OneToMany(mappedBy = "user")
+    private List<ReadingSpaceMemberRole> readingSpaceMemberRoleList;
 
     @Builder
     public User(Long id, String email, String name, String password, MembershipType membership) {

@@ -5,6 +5,6 @@ package com.sh.threesentences.users.exception;
  */
 public class EmailDuplicateException extends RuntimeException{
     public EmailDuplicateException() {
-        super("이미 가입된 이메일 주소입니다.");
+        super(UserErrorCode.EMAIL_DUPLICATE.getMessage());
     }
 }

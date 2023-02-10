@@ -1,11 +1,11 @@
 package com.sh.threesentences.users.service;
 
-import static com.sh.threesentences.utils.UserFixture.DEFAULT_MEMBERSHIP;
-import static com.sh.threesentences.utils.UserFixture.UNUSED_ID;
-import static com.sh.threesentences.utils.UserFixture.USER_ID;
-import static com.sh.threesentences.utils.UserFixture.VALID_EMAIL;
-import static com.sh.threesentences.utils.UserFixture.VALID_NAME;
-import static com.sh.threesentences.utils.UserFixture.VALID_REQUEST;
+import static com.sh.threesentences.users.fixture.UserFixture.DEFAULT_MEMBERSHIP;
+import static com.sh.threesentences.users.fixture.UserFixture.UNUSED_ID;
+import static com.sh.threesentences.users.fixture.UserFixture.USER_ID;
+import static com.sh.threesentences.users.fixture.UserFixture.VALID_EMAIL;
+import static com.sh.threesentences.users.fixture.UserFixture.VALID_NAME;
+import static com.sh.threesentences.users.fixture.UserFixture.VALID_REQUEST;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -38,10 +38,11 @@ class UserServiceTest {
 
     @Nested
     @DisplayName("save 메소드는")
-    class Context_save_method {
+    class ContextSaveMethod {
+
         @Nested
         @DisplayName("회원 등록 요청이 정상적으로 온 경우")
-        class Context_save_valid_user {
+        class ContextSaveValidUser {
 
             @DisplayName("사용자를 등록 후 리턴한다.")
             @Test
@@ -57,10 +58,11 @@ class UserServiceTest {
 
     @Nested
     @DisplayName("checkEmailDuplicated 메소드는")
-    class Context_email_duplicate_check_method {
+    class ContextEmailDuplicateCheckMethod {
+
         @Nested
         @DisplayName("이메일이 중복인 경우")
-        class Context_save_invalid_user {
+        class ContextSaveInvalidUser {
 
             @DisplayName("EmailDuplicateException 예외를 던진다.")
             @Test
@@ -75,10 +77,11 @@ class UserServiceTest {
 
     @Nested
     @DisplayName("delete 메소드는")
-    class Context_delete_method {
+    class ContextDeleteMethod {
+
         @Nested
         @DisplayName("요청된 사용자가 등록되어 있으면")
-        class Context_delete_user {
+        class ContextDeleteUser {
 
             @DisplayName("사용자 엔티티의 is_delete 컬럼을 true로 변경한다.")
             @Test
@@ -94,7 +97,7 @@ class UserServiceTest {
 
         @Nested
         @DisplayName("요청된 사용자가 등록되어 있지 않으면")
-        class Context_delete_not_existing_user {
+        class ContextDeleteNotExistingUser {
 
             @DisplayName("UserNotFoundException 예외를 던진다.")
             @Test
@@ -105,6 +108,4 @@ class UserServiceTest {
             }
         }
     }
-
-
 }

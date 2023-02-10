@@ -26,23 +26,12 @@ public class UserController {
 
     private final UserService userService;
 
-    /**
-     * 사용자를 등록 후 리턴합니다.
-     *
-     * @param userRequestDto 등록 요청 사용자 정보
-     * @return 등록된 사용자 정보
-     */
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public UserResponseDto save(@RequestBody @Valid UserRequestDto userRequestDto) {
         return userService.save(userRequestDto);
     }
 
-    /**
-     * 이메일 주소로 사용자 중복여부를 확인합니다.
-     *
-     * @param email 중복 확인 요청 이메일
-     */
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/email/duplicate-check")
     public void checkEmailDuplicated(@RequestParam @Email(message="이메일 형식이 잘못되었습니다.") String email) {
