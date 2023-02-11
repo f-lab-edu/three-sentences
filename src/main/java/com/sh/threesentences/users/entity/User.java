@@ -2,6 +2,7 @@ package com.sh.threesentences.users.entity;
 
 import com.sh.threesentences.common.entity.BaseEntity;
 import com.sh.threesentences.readingspace.entity.ReadingSpaceMemberRole;
+import com.sh.threesentences.users.enums.AuthorityType;
 import com.sh.threesentences.users.enums.MembershipType;
 import java.util.List;
 import javax.persistence.Column;
@@ -56,16 +57,21 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private MembershipType membership = MembershipType.FREE;
 
+    @Column
+    private String authorityType = AuthorityType.BASIC.getName();
+
     @OneToMany(mappedBy = "user")
     private List<ReadingSpaceMemberRole> readingSpaceMemberRoleList;
 
     @Builder
-    public User(Long id, String email, String name, String password, MembershipType membership) {
+    public User(Long id, String email, String name, String password, MembershipType membership,
+        String authorityType) {
         this.id = id;
         this.email = email;
         this.name = name;
         this.password = password;
         this.membership = membership;
+        this.authorityType = authorityType;
     }
 
 }
