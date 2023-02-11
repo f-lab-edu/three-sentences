@@ -1,7 +1,6 @@
 package com.sh.threesentences;
 
-import java.util.Optional;
-import java.util.UUID;
+import com.sh.threesentences.common.config.AuditorAwareImpl;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -18,12 +17,21 @@ public class ThreeSentencesApplication {
         SpringApplication.run(ThreeSentencesApplication.class, args);
     }
 
+    /**
+     * created_by, updated_by 에 대한 사용자 지정을 위한 Bean
+     *
+     * @return AuditorAware
+     */
     @Bean
     public AuditorAware<String> auditorProvider() {
-        //TODO: 로그인 기능 구현시 UUID를 사용자 ID로 변경이 필요함
-        return () -> Optional.of(UUID.randomUUID().toString());
+        return new AuditorAwareImpl();
     }
 
+    /**
+     * 사용자 패스워드 저장 및 인증에 사용되는 Bean
+     *
+     * @return PasswordEncoder
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(4);
