@@ -14,6 +14,7 @@ public class ReadingSpaceFixture {
 
     public static Long USER_ID = 1L;
 
+    public static String USER_EMAIL = "abcd@gmail.com";
     public static String USER_NAME = "김길동";
 
     public static Long READING_SPACE_ID = 1L;

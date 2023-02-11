@@ -1,5 +1,6 @@
 package com.sh.threesentences.readingspace.service;
 
+import static com.sh.threesentences.readingspace.exception.ReadingSpaceErrorCode.DELETE_ADMIN_ONLY;
 import static com.sh.threesentences.readingspace.exception.ReadingSpaceErrorCode.MEMBER_IS_STILL_IN_SPACE;
 import static com.sh.threesentences.readingspace.exception.ReadingSpaceErrorCode.READING_SPACE_NOT_FOUND;
 
@@ -13,6 +14,7 @@ import com.sh.threesentences.readingspace.enums.UserRole;
 import com.sh.threesentences.readingspace.repository.ReadingSpaceRepository;
 import com.sh.threesentences.readingspace.repository.UserReadingSpaceRepository;
 import com.sh.threesentences.users.entity.User;
+import com.sh.threesentences.users.service.UserService;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
@@ -28,13 +30,38 @@ public class ReadingSpaceService {
 
     private final UserReadingSpaceRepository userReadingSpaceRepository;
 
-    public ReadingSpaceResponseDto create(ReadingSpaceRequestDto readingSpaceRequestDto, User user) {
+    private final UserService userService;
+
+    public ReadingSpaceResponseDto create(ReadingSpaceRequestDto readingSpaceRequestDto, String email) {
+
+        User user = userService.findByEmail(email);
+
+        ReadingSpace savedReadingSpace = createReadingSpace(
+            readingSpaceRequestDto, user);
+
+        return ReadingSpaceResponseDto.fromEntity(savedReadingSpace);
+    }
+
+    private ReadingSpace createReadingSpace(ReadingSpaceRequestDto readingSpaceRequestDto, User user) {
         ReadingSpace savedReadingSpace = readingSpaceRepository.save(readingSpaceRequestDto.toEntity());
 
-        // TODO: 로그인한 사용자의 정보를 조회해서 User 엔티티를 UserReadingSpaceMapping에 추가해줘야함.
         ReadingSpaceMemberRole readingSpaceMemberRole = new ReadingSpaceMemberRole(user,
             savedReadingSpace, UserRole.ADMIN);
         userReadingSpaceRepository.save(readingSpaceMemberRole);
+        return savedReadingSpace;
+    }
+
+    /**
+     * 회원 등록시에 기본적으로 함께 만들어지는 Space를 생성한다.
+     *
+     * @param readingSpaceRequestDto 생성 요청 DTO
+     * @param user                   사용자
+     * @return 생성된 Space 응답값
+     */
+    public ReadingSpaceResponseDto createInitialSpace(ReadingSpaceRequestDto readingSpaceRequestDto, User user) {
+
+        ReadingSpace savedReadingSpace = createReadingSpace(
+            readingSpaceRequestDto, user);
 
         return ReadingSpaceResponseDto.fromEntity(savedReadingSpace);
     }
@@ -55,18 +82,28 @@ public class ReadingSpaceService {
         return ReadingSpaceResponseDto.fromEntity(readingSpace);
     }
 
-    public List<ReadingSpaceResponseDto> getMyReadingSpaces() {
-        // TODO: 로그인한 사용자의 id를 조회할 수 있게 수정
-        Long id = 1L;
-        return userReadingSpaceRepository.findByUserId(id)
+    public List<ReadingSpaceResponseDto> getMyReadingSpaces(String email) {
+        User user = userService.findByEmail(email);
+        return userReadingSpaceRepository.findByUserId(user.getId())
             .stream()
             .map(ReadingSpaceMemberRole::getReadingSpace)
             .map(ReadingSpaceResponseDto::fromEntity)
             .collect(Collectors.toList());
     }
 
-    public void delete(Long id) {
-        // TODO: 사용자 정보 조회 후, 어드민 권한인 경우에만 삭제 기능을 진행할 수 있게 변경
+    public void delete(Long id, String email) {
+        User user = userService.findByEmail(email);
+        List<ReadingSpaceMemberRole> readingSpaceMemberRoles = user.getReadingSpaceMemberRoleList();
+        ReadingSpaceMemberRole spaceMemberRole = readingSpaceMemberRoles
+            .stream()
+            .filter(s -> s.getReadingSpace().getId().equals(id))
+            .findFirst()
+            .orElseThrow(()
+                -> new IllegalStateException(READING_SPACE_NOT_FOUND.getMessage()));
+
+        if (!spaceMemberRole.getUserRole().equals(UserRole.ADMIN)) {
+            throw new IllegalStateException(DELETE_ADMIN_ONLY.getMessage());
+        }
 
         int memberCount = userReadingSpaceRepository.countByReadingSpaceId(id);
         if (hasMembersGreaterThanOne(memberCount)) {
