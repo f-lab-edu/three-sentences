@@ -7,18 +7,25 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication
 @EnableJpaAuditing
 public class ThreeSentencesApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(ThreeSentencesApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(ThreeSentencesApplication.class, args);
+    }
 
     @Bean
     public AuditorAware<String> auditorProvider() {
         //TODO: 로그인 기능 구현시 UUID를 사용자 ID로 변경이 필요함
         return () -> Optional.of(UUID.randomUUID().toString());
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(4);
     }
 }
