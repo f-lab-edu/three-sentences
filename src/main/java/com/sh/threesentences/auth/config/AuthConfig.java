@@ -39,6 +39,11 @@ public class AuthConfig {
             .formLogin().disable()
             .httpBasic();
 
+        http.logout()
+            .logoutUrl("/api/v1/auth/logout")
+            .deleteCookies("JSESSIONID")
+            .invalidateHttpSession(true);
+
         return http.build();
     }
 
