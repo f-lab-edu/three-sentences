@@ -1,5 +1,6 @@
-package com.sh.threesentences.auth.config;
+package com.sh.threesentences.auth.service;
 
+import com.sh.threesentences.auth.config.SecurityUser;
 import com.sh.threesentences.users.entity.User;
 import com.sh.threesentences.users.exception.UserNotFoundException;
 import com.sh.threesentences.users.repository.UserRepository;

@@ -1,4 +1,4 @@
-package com.sh.threesentences.auth.config;
+package com.sh.threesentences.auth.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -27,6 +27,11 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         UserDetails userDetails = jpaUserDetailService.loadUserByUsername(username);
 
+        return checkPassword(username, password, userDetails);
+    }
+
+    private UsernamePasswordAuthenticationToken checkPassword(String username, String password,
+        UserDetails userDetails) {
         if (passwordEncoder.matches(password, userDetails.getPassword())) {
             return new UsernamePasswordAuthenticationToken(username, password, userDetails.getAuthorities());
         } else {
