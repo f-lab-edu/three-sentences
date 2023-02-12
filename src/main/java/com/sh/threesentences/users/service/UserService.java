@@ -83,9 +83,4 @@ public class UserService {
             .orElseThrow(UserNotFoundException::new);
     }
 
-    public User findByEmail(String email) {
-        return userRepository.findByEmail(email)
-            .orElseThrow(UserNotFoundException::new);
-    }
-
 }

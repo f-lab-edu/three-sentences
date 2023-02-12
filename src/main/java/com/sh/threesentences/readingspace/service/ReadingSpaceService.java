@@ -14,7 +14,8 @@ import com.sh.threesentences.readingspace.enums.UserRole;
 import com.sh.threesentences.readingspace.repository.ReadingSpaceRepository;
 import com.sh.threesentences.readingspace.repository.UserReadingSpaceRepository;
 import com.sh.threesentences.users.entity.User;
-import com.sh.threesentences.users.service.UserService;
+import com.sh.threesentences.users.exception.UserNotFoundException;
+import com.sh.threesentences.users.repository.UserRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
@@ -30,11 +31,12 @@ public class ReadingSpaceService {
 
     private final UserReadingSpaceRepository userReadingSpaceRepository;
 
-    private final UserService userService;
+    private final UserRepository userRepository;
 
     public ReadingSpaceResponseDto create(ReadingSpaceRequestDto readingSpaceRequestDto, String email) {
 
-        User user = userService.findByEmail(email);
+        User user = userRepository.findByEmail(email)
+            .orElseThrow(UserNotFoundException::new);
 
         ReadingSpace savedReadingSpace = createReadingSpace(
             readingSpaceRequestDto, user);
@@ -83,7 +85,8 @@ public class ReadingSpaceService {
     }
 
     public List<ReadingSpaceResponseDto> getMyReadingSpaces(String email) {
-        User user = userService.findByEmail(email);
+        User user = userRepository.findByEmail(email)
+            .orElseThrow(UserNotFoundException::new);
         return userReadingSpaceRepository.findByUserId(user.getId())
             .stream()
             .map(ReadingSpaceMemberRole::getReadingSpace)
@@ -92,7 +95,8 @@ public class ReadingSpaceService {
     }
 
     public void delete(Long id, String email) {
-        User user = userService.findByEmail(email);
+        User user = userRepository.findByEmail(email)
+            .orElseThrow(UserNotFoundException::new);
         List<ReadingSpaceMemberRole> readingSpaceMemberRoles = user.getReadingSpaceMemberRoleList();
         ReadingSpaceMemberRole spaceMemberRole = readingSpaceMemberRoles
             .stream()

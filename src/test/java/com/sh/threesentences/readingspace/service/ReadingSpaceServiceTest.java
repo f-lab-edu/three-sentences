@@ -9,6 +9,7 @@ import static com.sh.threesentences.readingspace.fixture.ReadingSpaceFixture.MY_
 import static com.sh.threesentences.readingspace.fixture.ReadingSpaceFixture.PUBLIC_READING_SPACES_SIZE;
 import static com.sh.threesentences.readingspace.fixture.ReadingSpaceFixture.READING_SPACE_ID;
 import static com.sh.threesentences.readingspace.fixture.ReadingSpaceFixture.UNUSED_READING_SPACE_ID;
+import static com.sh.threesentences.readingspace.fixture.ReadingSpaceFixture.USER_EMAIL;
 import static com.sh.threesentences.readingspace.fixture.ReadingSpaceFixture.USER_ID;
 import static com.sh.threesentences.readingspace.fixture.ReadingSpaceFixture.USER_READING_MAPPINGS;
 import static com.sh.threesentences.readingspace.fixture.ReadingSpaceFixture.USER_READING_MAPPINGS_FOR_DELETE_2;
@@ -86,7 +87,7 @@ class ReadingSpaceServiceTest {
                 // TODO 임시 사용자. 추후 삭제
                 User user = new User();
                 ReadingSpaceResponseDto readingSpaceResponseDto = readingSpaceService.create(
-                    validReadingSpaceRequestDto, user);
+                    validReadingSpaceRequestDto, user.getEmail());
 
                 assertThat(readingSpaceResponseDto.getName()).isEqualTo(validReadingSpaceResponseDto.getName());
                 assertThat(readingSpaceResponseDto.getDescription()).isEqualTo(
@@ -153,7 +154,7 @@ class ReadingSpaceServiceTest {
                 USER_READING_MAPPINGS
             );
 
-            List<ReadingSpaceResponseDto> myReadingSpaces = readingSpaceService.getMyReadingSpaces();
+            List<ReadingSpaceResponseDto> myReadingSpaces = readingSpaceService.getMyReadingSpaces(USER_EMAIL);
 
             assertThat(myReadingSpaces).hasSize(MY_READING_SPACES_SIZE);
         }
@@ -170,7 +171,7 @@ class ReadingSpaceServiceTest {
                 USER_READING_MAPPINGS_FOR_DELETE_CONDITION_MET
             );
 
-            readingSpaceService.delete(READING_SPACE_ID);
+            readingSpaceService.delete(READING_SPACE_ID, USER_EMAIL);
             boolean deleted = USER_READING_MAPPINGS_FOR_DELETE_CONDITION_MET.get(0).getReadingSpace().isDeleted();
             assertThat(deleted).isTrue();
         }
@@ -180,7 +181,7 @@ class ReadingSpaceServiceTest {
         void not_found_readingspace_for_update() {
             given(userReadingSpaceRepository.findByReadingSpaceId(UNUSED_READING_SPACE_ID)).willReturn(List.of());
 
-            assertThatThrownBy(() -> readingSpaceService.delete(UNUSED_READING_SPACE_ID))
+            assertThatThrownBy(() -> readingSpaceService.delete(UNUSED_READING_SPACE_ID, USER_EMAIL))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessage(READING_SPACE_NOT_FOUND.getMessage());
         }
@@ -191,7 +192,7 @@ class ReadingSpaceServiceTest {
             given(userReadingSpaceRepository.countByReadingSpaceId(READING_SPACE_ID))
                 .willReturn(3);
 
-            assertThatThrownBy(() -> readingSpaceService.delete(READING_SPACE_ID))
+            assertThatThrownBy(() -> readingSpaceService.delete(READING_SPACE_ID, USER_EMAIL))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessage(MEMBER_IS_STILL_IN_SPACE.getMessage());
         }
@@ -202,7 +203,7 @@ class ReadingSpaceServiceTest {
             given(userReadingSpaceRepository.findByReadingSpaceId(READING_SPACE_ID))
                 .willReturn(USER_READING_MAPPINGS_FOR_DELETE_2);
 
-            assertThatThrownBy(() -> readingSpaceService.delete(READING_SPACE_ID))
+            assertThatThrownBy(() -> readingSpaceService.delete(READING_SPACE_ID, USER_EMAIL))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessage(NO_ADMIN_IN_SPACE.getMessage());
         }
