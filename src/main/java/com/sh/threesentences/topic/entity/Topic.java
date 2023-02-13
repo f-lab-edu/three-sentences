@@ -1,9 +1,8 @@
-package com.sh.threesentences.readingspace.entity;
+package com.sh.threesentences.topic.entity;
 
 import com.sh.threesentences.common.entity.BaseEntity;
 import com.sh.threesentences.common.enums.OpenType;
-import com.sh.threesentences.readingspace.dto.ReadingSpaceRequestDto;
-import com.sh.threesentences.topic.entity.Topic;
+import com.sh.threesentences.readingspace.entity.ReadingSpace;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
@@ -13,6 +12,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,7 +22,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-public class ReadingSpace extends BaseEntity {
+public class Topic extends BaseEntity {
 
     /**
      * 엔티티 식별자
@@ -49,31 +50,20 @@ public class ReadingSpace extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private OpenType openType = OpenType.PUBLIC;
 
-    /**
-     * 스페이스 프로필 이미지
-     */
-    @Column
-    private String profileImageUrl;
+    @ManyToOne
+    @JoinColumn(name = "reading_space_id")
+    private ReadingSpace readingSpace;
 
-    @OneToMany(mappedBy = "readingSpace")
-    private final List<ReadingSpaceMemberRole> readingSpaceMemberRole = new ArrayList<>();
-
-    @OneToMany(mappedBy = "readingSpace")
-    private final List<Topic> topics = new ArrayList<>();
+    @OneToMany(mappedBy = "topic")
+    private final List<SubTopic> subTopics = new ArrayList<>();
 
     @Builder
-    public ReadingSpace(Long id, String name, String description, OpenType openType, String profileImageUrl) {
+    public Topic(Long id, String name, String description, OpenType openType, ReadingSpace readingSpace) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.openType = openType;
-        this.profileImageUrl = profileImageUrl;
+        this.readingSpace = readingSpace;
     }
 
-    public void update(ReadingSpaceRequestDto readingSpaceRequestDto) {
-        this.name = readingSpaceRequestDto.getName();
-        this.description = readingSpaceRequestDto.getDescription();
-        this.openType = readingSpaceRequestDto.getOpenType();
-        this.profileImageUrl = readingSpaceRequestDto.getProfileImageUrl();
-    }
 }
