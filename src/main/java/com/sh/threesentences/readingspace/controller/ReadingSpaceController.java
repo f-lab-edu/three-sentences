@@ -1,9 +1,9 @@
 package com.sh.threesentences.readingspace.controller;
 
+import com.sh.threesentences.auth.config.EmailAuthentication;
 import com.sh.threesentences.readingspace.dto.ReadingSpaceRequestDto;
 import com.sh.threesentences.readingspace.dto.ReadingSpaceResponseDto;
 import com.sh.threesentences.readingspace.service.ReadingSpaceService;
-import com.sh.threesentences.users.service.UserService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,8 +24,6 @@ public class ReadingSpaceController {
 
     private final ReadingSpaceService readingSpaceService;
 
-    private final UserService userService;
-
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
     public List<ReadingSpaceResponseDto> getPublicReadingSpaces() {
@@ -34,15 +32,15 @@ public class ReadingSpaceController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/me")
-    public List<ReadingSpaceResponseDto> getMyReadingSpaces(Authentication auth) {
-        return readingSpaceService.getMyReadingSpaces(auth.getName());
+    public List<ReadingSpaceResponseDto> getMyReadingSpaces(EmailAuthentication auth) {
+        return readingSpaceService.getMyReadingSpaces(auth.getEmail());
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public ReadingSpaceResponseDto createReadingSpace(@RequestBody ReadingSpaceRequestDto readingSpaceRequestDto,
-        Authentication auth) {
-        return readingSpaceService.create(readingSpaceRequestDto, auth.getName());
+        EmailAuthentication auth) {
+        return readingSpaceService.create(readingSpaceRequestDto, auth.getEmail());
     }
 
     @ResponseStatus(HttpStatus.OK)
