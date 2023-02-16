@@ -1,29 +1,40 @@
 package com.sh.threesentences.auth.config;
 
-import com.sh.threesentences.auth.service.CustomAuthenticationProvider;
-import com.sh.threesentences.auth.service.JpaUserDetailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @RequiredArgsConstructor
 public class AuthConfig {
 
-    private final CustomAuthenticationProvider authProvider;
+    private final AuthenticationProvider authProvider;
 
-    private final JpaUserDetailService jpaUserDetailService;
+    private final UserDetailsService jpaUserDetailService;
 
 
     @Bean
     public UserDetailsService userDetailsService() {
         return jpaUserDetailService;
+    }
+
+    /**
+     * 사용자 패스워드 저장 및 인증에 사용되는 Bean
+     *
+     * @return PasswordEncoder
+     */
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(4);
     }
 
     @Bean
