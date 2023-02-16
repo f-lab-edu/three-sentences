@@ -3,6 +3,7 @@ package com.sh.threesentences.topic.entity;
 import com.sh.threesentences.common.entity.BaseEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -42,7 +43,7 @@ public class Comment extends BaseEntity {
     @Column
     private int likes;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sentence_id")
     private Sentence sentence;
 
