@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class SecurityUser implements UserDetails {
 
@@ -52,5 +53,9 @@ public class SecurityUser implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public boolean checkPassword(String username, String password, PasswordEncoder passwordEncoder) {
+        return passwordEncoder.matches(password, this.getPassword());
     }
 }
