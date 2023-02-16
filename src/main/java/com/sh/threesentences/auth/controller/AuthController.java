@@ -2,6 +2,7 @@ package com.sh.threesentences.auth.controller;
 
 import com.sh.threesentences.auth.dto.LoginDto;
 import com.sh.threesentences.auth.service.AuthService;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,7 +20,7 @@ public class AuthController {
 
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("login")
-    public void login(@RequestBody LoginDto loginDto) {
+    public void login(@Valid @RequestBody LoginDto loginDto) {
         authService.login(loginDto);
     }
 

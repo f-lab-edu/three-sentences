@@ -1,16 +1,22 @@
 package com.sh.threesentences.auth.dto;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import lombok.Getter;
 
 @Getter
 public class LoginDto {
 
-    String email;
+    @Email
+    @NotBlank
+    private final String email;
 
-    String password;
+    @NotBlank
+    private final String password;
 
     public LoginDto(String email, String password) {
         this.email = email;
         this.password = password;
     }
+
 }
