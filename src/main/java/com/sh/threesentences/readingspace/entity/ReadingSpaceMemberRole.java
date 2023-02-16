@@ -42,4 +42,8 @@ public class ReadingSpaceMemberRole {
         this.userRole = userRole;
     }
 
+    public boolean isAdmin() {
+        return this.getUserRole().equals(UserRole.ADMIN);
+    }
+
 }

@@ -97,15 +97,11 @@ public class ReadingSpaceService {
     public void delete(Long id, String email) {
         User user = userRepository.findByEmail(email)
             .orElseThrow(UserNotFoundException::new);
-        List<ReadingSpaceMemberRole> readingSpaceMemberRoles = user.getReadingSpaceMemberRoleList();
-        ReadingSpaceMemberRole spaceMemberRole = readingSpaceMemberRoles
-            .stream()
-            .filter(s -> s.getReadingSpace().getId().equals(id))
-            .findFirst()
-            .orElseThrow(()
-                -> new IllegalStateException(READING_SPACE_NOT_FOUND.getMessage()));
 
-        if (!spaceMemberRole.getUserRole().equals(UserRole.ADMIN)) {
+        ReadingSpaceMemberRole spaceMemberRole = userReadingSpaceRepository.findByUserAndReadingSpaceId(user, id)
+            .orElseThrow(() -> new IllegalStateException(READING_SPACE_NOT_FOUND.getMessage()));
+
+        if (!spaceMemberRole.isAdmin()) {
             throw new IllegalStateException(DELETE_ADMIN_ONLY.getMessage());
         }
 
