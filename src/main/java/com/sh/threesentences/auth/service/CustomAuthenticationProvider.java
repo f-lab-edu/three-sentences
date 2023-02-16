@@ -1,12 +1,13 @@
 package com.sh.threesentences.auth.service;
 
+import com.sh.threesentences.auth.config.SecurityUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
-    private final JpaUserDetailService jpaUserDetailService;
+    private final UserDetailsService jpaUserDetailService;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -25,18 +26,12 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         String username = authentication.getName();
         String password = String.valueOf(authentication.getCredentials());
 
-        UserDetails userDetails = jpaUserDetailService.loadUserByUsername(username);
-
-        return checkPassword(username, password, userDetails);
-    }
-
-    private UsernamePasswordAuthenticationToken checkPassword(String username, String password,
-        UserDetails userDetails) {
-        if (passwordEncoder.matches(password, userDetails.getPassword())) {
-            return new UsernamePasswordAuthenticationToken(username, password, userDetails.getAuthorities());
-        } else {
+        SecurityUser userDetails = (SecurityUser) jpaUserDetailService.loadUserByUsername(username);
+        if (!userDetails.checkPassword(username, password, passwordEncoder)) {
             throw new BadCredentialsException("인증에 실패했습니다.");
         }
+
+        return new UsernamePasswordAuthenticationToken(username, password, userDetails.getAuthorities());
     }
 
     @Override
