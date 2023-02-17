@@ -15,6 +15,7 @@ public class ReadingSpaceFixture {
     public static Long USER_ID = 1L;
 
     public static String USER_EMAIL = "abcd@gmail.com";
+
     public static String USER_NAME = "김길동";
 
     public static Long READING_SPACE_ID = 1L;
@@ -37,6 +38,7 @@ public class ReadingSpaceFixture {
 
     public static User USER_1 = User.builder()
         .id(USER_ID)
+        .email(USER_EMAIL)
         .name(USER_NAME)
         .password("12345")
         .membership(MembershipType.BASIC)
@@ -44,6 +46,7 @@ public class ReadingSpaceFixture {
 
     public static User USER_2 = User.builder()
         .id(2L)
+        .email("test@email.com")
         .name("test2")
         .password("12345")
         .membership(MembershipType.BASIC)
@@ -102,9 +105,8 @@ public class ReadingSpaceFixture {
         .stream()
         .filter(s -> s.getUser().getId().equals(USER_ID)).count();
 
-    public static List<ReadingSpaceMemberRole> USER_READING_MAPPINGS_FOR_DELETE_CONDITION_MET = List.of(
-        new ReadingSpaceMemberRole(USER_1, READING_SPACE_1, UserRole.ADMIN)
-    );
+    public static ReadingSpaceMemberRole USER_READING_MAPPINGS_FOR_DELETE_CONDITION_MET =
+        new ReadingSpaceMemberRole(USER_1, READING_SPACE_1, UserRole.ADMIN);
 
 
     public static List<ReadingSpaceMemberRole> USER_READING_MAPPINGS_FOR_DELETE_1 = List.of(
@@ -112,7 +114,6 @@ public class ReadingSpaceFixture {
         new ReadingSpaceMemberRole(USER_2, READING_SPACE_1, UserRole.REDINGMATE)
     );
 
-    public static List<ReadingSpaceMemberRole> USER_READING_MAPPINGS_FOR_DELETE_2 = List.of(
-        new ReadingSpaceMemberRole(USER_1, READING_SPACE_1, UserRole.REDINGMATE)
-    );
+    public static ReadingSpaceMemberRole USER_READING_MAPPINGS_FOR_DELETE_2 =
+        new ReadingSpaceMemberRole(USER_1, READING_SPACE_1, UserRole.REDINGMATE);
 }
