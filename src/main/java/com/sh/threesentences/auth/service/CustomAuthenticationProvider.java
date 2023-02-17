@@ -27,10 +27,9 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         String password = String.valueOf(authentication.getCredentials());
 
         SecurityUser userDetails = (SecurityUser) jpaUserDetailService.loadUserByUsername(username);
-        if (!userDetails.checkPassword(username, password, passwordEncoder)) {
+        if (!userDetails.checkPassword(password, passwordEncoder)) {
             throw new BadCredentialsException("인증에 실패했습니다.");
         }
-
         return new UsernamePasswordAuthenticationToken(username, password, userDetails.getAuthorities());
     }
 

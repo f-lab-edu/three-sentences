@@ -55,7 +55,7 @@ public class SecurityUser implements UserDetails {
         return true;
     }
 
-    public boolean checkPassword(String username, String password, PasswordEncoder passwordEncoder) {
+    public boolean checkPassword(String password, PasswordEncoder passwordEncoder) {
         return passwordEncoder.matches(password, this.getPassword());
     }
 }
