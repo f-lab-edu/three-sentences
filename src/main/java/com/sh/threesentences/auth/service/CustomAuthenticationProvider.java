@@ -1,5 +1,6 @@
 package com.sh.threesentences.auth.service;
 
+import com.sh.threesentences.auth.config.EmailAuthentication;
 import com.sh.threesentences.auth.config.SecurityUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -30,7 +31,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         if (!userDetails.checkPassword(password, passwordEncoder)) {
             throw new BadCredentialsException("인증에 실패했습니다.");
         }
-        return new UsernamePasswordAuthenticationToken(username, password, userDetails.getAuthorities());
+        return new EmailAuthentication(username, password, userDetails.getAuthorities());
     }
 
     @Override
