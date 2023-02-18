@@ -114,8 +114,10 @@ public class ReadingSpaceService {
         ReadingSpaceMembers readingSpaceMembers = ReadingSpaceMembers.fromEntity(membersOfReadingSpace);
         readingSpaceMembers.checkSpaceDeleteCondition();
 
-        ReadingSpace readingSpace = membersOfReadingSpace.get(0).getReadingSpace();
-        readingSpace.delete();
+        ReadingSpaceMemberRole readingSpaceMemberRole = membersOfReadingSpace.get(0);
+        readingSpaceMemberRole.delete();
+        readingSpaceMemberRole.getReadingSpace().delete();
+
     }
 
     private boolean hasMembersGreaterThanOne(int memberCount) {
