@@ -1,6 +1,7 @@
 package com.sh.threesentences.users.repository;
 
 import com.sh.threesentences.users.entity.User;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -12,5 +13,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * @return 조회된 이메일
      */
     boolean existsByEmail(String email);
+
+    Optional<User> findByEmail(String email);
 
 }

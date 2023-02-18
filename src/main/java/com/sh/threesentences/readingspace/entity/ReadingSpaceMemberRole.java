@@ -1,5 +1,6 @@
 package com.sh.threesentences.readingspace.entity;
 
+import com.sh.threesentences.common.entity.BaseEntity;
 import com.sh.threesentences.readingspace.enums.UserRole;
 import com.sh.threesentences.users.entity.User;
 import javax.persistence.Column;
@@ -16,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-public class ReadingSpaceMemberRole {
+public class ReadingSpaceMemberRole extends BaseEntity {
 
     @EmbeddedId
     UserReadingSpaceMappingId id;
@@ -40,6 +41,10 @@ public class ReadingSpaceMemberRole {
         this.user = user;
         this.readingSpace = readingSpace;
         this.userRole = userRole;
+    }
+
+    public boolean isAdmin() {
+        return this.getUserRole().equals(UserRole.ADMIN);
     }
 
 }

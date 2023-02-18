@@ -1,14 +1,16 @@
 package com.sh.threesentences.readingspace.service;
 
 
+import static com.sh.threesentences.readingspace.exception.ReadingSpaceErrorCode.DELETE_ADMIN_ONLY;
 import static com.sh.threesentences.readingspace.exception.ReadingSpaceErrorCode.MEMBER_IS_STILL_IN_SPACE;
-import static com.sh.threesentences.readingspace.exception.ReadingSpaceErrorCode.NO_ADMIN_IN_SPACE;
 import static com.sh.threesentences.readingspace.exception.ReadingSpaceErrorCode.READING_SPACE_NOT_FOUND;
 import static com.sh.threesentences.readingspace.fixture.ReadingSpaceFixture.ALL_READING_SPACES;
 import static com.sh.threesentences.readingspace.fixture.ReadingSpaceFixture.MY_READING_SPACES_SIZE;
 import static com.sh.threesentences.readingspace.fixture.ReadingSpaceFixture.PUBLIC_READING_SPACES_SIZE;
 import static com.sh.threesentences.readingspace.fixture.ReadingSpaceFixture.READING_SPACE_ID;
 import static com.sh.threesentences.readingspace.fixture.ReadingSpaceFixture.UNUSED_READING_SPACE_ID;
+import static com.sh.threesentences.readingspace.fixture.ReadingSpaceFixture.USER_1;
+import static com.sh.threesentences.readingspace.fixture.ReadingSpaceFixture.USER_EMAIL;
 import static com.sh.threesentences.readingspace.fixture.ReadingSpaceFixture.USER_ID;
 import static com.sh.threesentences.readingspace.fixture.ReadingSpaceFixture.USER_READING_MAPPINGS;
 import static com.sh.threesentences.readingspace.fixture.ReadingSpaceFixture.USER_READING_MAPPINGS_FOR_DELETE_2;
@@ -26,7 +28,7 @@ import com.sh.threesentences.readingspace.dto.ReadingSpaceResponseDto;
 import com.sh.threesentences.readingspace.entity.ReadingSpace;
 import com.sh.threesentences.readingspace.repository.ReadingSpaceRepository;
 import com.sh.threesentences.readingspace.repository.UserReadingSpaceRepository;
-import com.sh.threesentences.users.entity.User;
+import com.sh.threesentences.users.repository.UserRepository;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -48,6 +50,9 @@ class ReadingSpaceServiceTest {
 
     @Mock
     UserReadingSpaceRepository userReadingSpaceRepository;
+
+    @Mock
+    UserRepository userRepository;
 
     @InjectMocks
     private ReadingSpaceService readingSpaceService;
@@ -72,6 +77,9 @@ class ReadingSpaceServiceTest {
             @DisplayName("ReadingSpace를 생성 후 리턴한다.")
             @Test
             void createReadingSpace() {
+
+                given(userRepository.findByEmail(USER_EMAIL)).willReturn(Optional.ofNullable(USER_1));
+
                 given(readingSpaceRepository.save(any(ReadingSpace.class))).will(invocation -> {
                     ReadingSpace readingSpace = invocation.getArgument(0);
                     return ReadingSpace.builder()
@@ -83,10 +91,8 @@ class ReadingSpaceServiceTest {
                         .build();
                 });
 
-                // TODO 임시 사용자. 추후 삭제
-                User user = new User();
                 ReadingSpaceResponseDto readingSpaceResponseDto = readingSpaceService.create(
-                    validReadingSpaceRequestDto, user);
+                    validReadingSpaceRequestDto, USER_EMAIL);
 
                 assertThat(readingSpaceResponseDto.getName()).isEqualTo(validReadingSpaceResponseDto.getName());
                 assertThat(readingSpaceResponseDto.getDescription()).isEqualTo(
@@ -149,11 +155,14 @@ class ReadingSpaceServiceTest {
         @DisplayName("특정 사용자의 readingspace를 조회한다.")
         @Test
         void getMyReadingSpaces() {
+
+            given(userRepository.findByEmail(USER_EMAIL)).willReturn(Optional.ofNullable(USER_1));
+
             given(userReadingSpaceRepository.findByUserId(USER_ID)).willReturn(
                 USER_READING_MAPPINGS
             );
 
-            List<ReadingSpaceResponseDto> myReadingSpaces = readingSpaceService.getMyReadingSpaces();
+            List<ReadingSpaceResponseDto> myReadingSpaces = readingSpaceService.getMyReadingSpaces(USER_EMAIL);
 
             assertThat(myReadingSpaces).hasSize(MY_READING_SPACES_SIZE);
         }
@@ -165,22 +174,33 @@ class ReadingSpaceServiceTest {
 
         @DisplayName("ReadingSpace를 삭제한다.")
         @Test
-        void delete() {
-            given(userReadingSpaceRepository.findByReadingSpaceId(READING_SPACE_ID)).willReturn(
-                USER_READING_MAPPINGS_FOR_DELETE_CONDITION_MET
-            );
+        void delete_reading_space() {
 
-            readingSpaceService.delete(READING_SPACE_ID);
-            boolean deleted = USER_READING_MAPPINGS_FOR_DELETE_CONDITION_MET.get(0).getReadingSpace().isDeleted();
+            given(userRepository.findByEmail(USER_EMAIL)).willReturn(Optional.ofNullable(USER_1));
+
+            given(userReadingSpaceRepository.findByUserAndReadingSpaceId(USER_1, READING_SPACE_ID)).willReturn(
+                Optional.ofNullable(USER_READING_MAPPINGS_FOR_DELETE_CONDITION_MET));
+
+            given(userReadingSpaceRepository.findByReadingSpaceId(READING_SPACE_ID)).willReturn(
+                List.of(USER_READING_MAPPINGS_FOR_DELETE_CONDITION_MET));
+
+            given(userReadingSpaceRepository.countByReadingSpaceId(READING_SPACE_ID))
+                .willReturn(1);
+
+            readingSpaceService.delete(READING_SPACE_ID, USER_EMAIL);
+            boolean deleted = USER_READING_MAPPINGS_FOR_DELETE_CONDITION_MET.getReadingSpace().isDeleted();
             assertThat(deleted).isTrue();
         }
 
         @DisplayName("삭제할 ReadingSpace가 없는 경우, 예외를 던진다.")
         @Test
         void not_found_readingspace_for_update() {
-            given(userReadingSpaceRepository.findByReadingSpaceId(UNUSED_READING_SPACE_ID)).willReturn(List.of());
+            given(userRepository.findByEmail(USER_EMAIL)).willReturn(Optional.ofNullable(USER_1));
 
-            assertThatThrownBy(() -> readingSpaceService.delete(UNUSED_READING_SPACE_ID))
+            given(userReadingSpaceRepository.findByUserAndReadingSpaceId(USER_1, UNUSED_READING_SPACE_ID)).willReturn(
+                Optional.empty());
+
+            assertThatThrownBy(() -> readingSpaceService.delete(UNUSED_READING_SPACE_ID, USER_EMAIL))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessage(READING_SPACE_NOT_FOUND.getMessage());
         }
@@ -188,10 +208,16 @@ class ReadingSpaceServiceTest {
         @DisplayName("ReadingSpace에 다른 멤버가 존재하는 경우, 예외를 던진다.")
         @Test
         void delete_condition_not_met_1() {
+
+            given(userRepository.findByEmail(USER_EMAIL)).willReturn(Optional.ofNullable(USER_1));
+
+            given(userReadingSpaceRepository.findByUserAndReadingSpaceId(USER_1, READING_SPACE_ID)).willReturn(
+                Optional.ofNullable(USER_READING_MAPPINGS_FOR_DELETE_CONDITION_MET));
+
             given(userReadingSpaceRepository.countByReadingSpaceId(READING_SPACE_ID))
                 .willReturn(3);
 
-            assertThatThrownBy(() -> readingSpaceService.delete(READING_SPACE_ID))
+            assertThatThrownBy(() -> readingSpaceService.delete(READING_SPACE_ID, USER_EMAIL))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessage(MEMBER_IS_STILL_IN_SPACE.getMessage());
         }
@@ -199,12 +225,15 @@ class ReadingSpaceServiceTest {
         @DisplayName("ReadingSpace에 멤버가 1명이지만 어드민이 아닌 경우, 예외를 던진다.")
         @Test
         void delete_condition_not_met_2() {
-            given(userReadingSpaceRepository.findByReadingSpaceId(READING_SPACE_ID))
-                .willReturn(USER_READING_MAPPINGS_FOR_DELETE_2);
+            given(userRepository.findByEmail(USER_EMAIL)).willReturn(Optional.ofNullable(USER_1));
 
-            assertThatThrownBy(() -> readingSpaceService.delete(READING_SPACE_ID))
+            given(userReadingSpaceRepository.findByUserAndReadingSpaceId(USER_1, READING_SPACE_ID)).willReturn(
+                Optional.ofNullable(USER_READING_MAPPINGS_FOR_DELETE_2));
+
+            assertThatThrownBy(() -> readingSpaceService.delete(READING_SPACE_ID, USER_EMAIL))
                 .isInstanceOf(IllegalStateException.class)
-                .hasMessage(NO_ADMIN_IN_SPACE.getMessage());
+                .hasMessage(DELETE_ADMIN_ONLY.getMessage());
+
         }
     }
 }

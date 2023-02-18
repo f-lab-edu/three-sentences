@@ -1,13 +1,13 @@
 package com.sh.threesentences.readingspace.controller;
 
+import com.sh.threesentences.auth.config.EmailAuthentication;
 import com.sh.threesentences.readingspace.dto.ReadingSpaceRequestDto;
 import com.sh.threesentences.readingspace.dto.ReadingSpaceResponseDto;
 import com.sh.threesentences.readingspace.service.ReadingSpaceService;
-import com.sh.threesentences.users.entity.User;
-import com.sh.threesentences.users.service.UserService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,8 +24,6 @@ public class ReadingSpaceController {
 
     private final ReadingSpaceService readingSpaceService;
 
-    private final UserService userService;
-
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
     public List<ReadingSpaceResponseDto> getPublicReadingSpaces() {
@@ -34,17 +32,15 @@ public class ReadingSpaceController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/me")
-    public List<ReadingSpaceResponseDto> getMyReadingSpaces() {
-        return readingSpaceService.getMyReadingSpaces();
+    public List<ReadingSpaceResponseDto> getMyReadingSpaces(EmailAuthentication auth) {
+        return readingSpaceService.getMyReadingSpaces(auth.getEmail());
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public ReadingSpaceResponseDto createReadingSpace(@RequestBody ReadingSpaceRequestDto readingSpaceRequestDto) {
-
-        // TODO: 임시 사용자 조회
-        User tempUser = userService.findByIdTemp(1L);
-        return readingSpaceService.create(readingSpaceRequestDto, tempUser);
+    public ReadingSpaceResponseDto createReadingSpace(@RequestBody ReadingSpaceRequestDto readingSpaceRequestDto,
+        EmailAuthentication auth) {
+        return readingSpaceService.create(readingSpaceRequestDto, auth.getEmail());
     }
 
     @ResponseStatus(HttpStatus.OK)
@@ -56,7 +52,7 @@ public class ReadingSpaceController {
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("{id}")
-    public void deleteReadingSpace(@PathVariable("id") Long id) {
-        readingSpaceService.delete(id);
+    public void deleteReadingSpace(@PathVariable("id") Long id, Authentication auth) {
+        readingSpaceService.delete(id, auth.getName());
     }
 }

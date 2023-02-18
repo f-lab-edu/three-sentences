@@ -9,9 +9,12 @@ import static com.sh.threesentences.users.fixture.UserFixture.VALID_REQUEST;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.sh.threesentences.readingspace.repository.ReadingSpaceRepository;
+import com.sh.threesentences.readingspace.repository.UserReadingSpaceRepository;
 import com.sh.threesentences.users.dto.UserResponseDto;
 import com.sh.threesentences.users.entity.User;
 import com.sh.threesentences.users.exception.EmailDuplicateException;
+import com.sh.threesentences.users.exception.UserErrorCode;
 import com.sh.threesentences.users.exception.UserNotFoundException;
 import com.sh.threesentences.users.repository.UserRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -29,11 +32,19 @@ class UserServiceTest {
     UserRepository userRepository;
 
     @Autowired
+    ReadingSpaceRepository readingSpaceRepository;
+
+    @Autowired
+    UserReadingSpaceRepository userReadingSpaceRepository;
+
+    @Autowired
     UserService userService;
 
     @AfterEach
     void cleanup() {
+        userReadingSpaceRepository.deleteAll();
         userRepository.deleteAll();
+        readingSpaceRepository.deleteAll();
     }
 
     @Nested
@@ -70,7 +81,7 @@ class UserServiceTest {
                 userService.save(VALID_REQUEST);
                 assertThatThrownBy(() -> userService.checkEmailDuplicated(VALID_EMAIL))
                     .isInstanceOf(EmailDuplicateException.class)
-                    .hasMessageContaining("이미 가입된");
+                    .hasMessageContaining(UserErrorCode.EMAIL_DUPLICATE.getMessage());
             }
         }
     }
@@ -85,7 +96,7 @@ class UserServiceTest {
 
             @DisplayName("사용자 엔티티의 is_delete 컬럼을 true로 변경한다.")
             @Test
-            void saveUser() {
+            void deleteUser() {
                 userService.save(VALID_REQUEST);
                 userService.delete(USER_ID);
                 User deletedUser = userRepository.findById(USER_ID)
@@ -104,7 +115,7 @@ class UserServiceTest {
             void saveUser() {
                 assertThatThrownBy(() -> userService.delete(UNUSED_ID))
                     .isInstanceOf(UserNotFoundException.class)
-                    .hasMessageContaining("등록되지 않은");
+                    .hasMessageContaining(UserErrorCode.USER_NOT_FOUND.getMessage());
             }
         }
     }

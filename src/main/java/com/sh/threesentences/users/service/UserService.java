@@ -9,9 +9,9 @@ import com.sh.threesentences.users.entity.User;
 import com.sh.threesentences.users.exception.EmailDuplicateException;
 import com.sh.threesentences.users.exception.UserNotFoundException;
 import com.sh.threesentences.users.repository.UserRepository;
-import com.sh.threesentences.utils.PasswordEncoder;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,6 +23,8 @@ public class UserService {
 
     private final ReadingSpaceService readingSpaceService;
 
+    private final PasswordEncoder passwordEncoder;
+
     /**
      * 사용자를 등록합니다.
      *
@@ -30,10 +32,11 @@ public class UserService {
      * @return 등록된 사용자 정보
      */
     public UserResponseDto save(UserRequestDto userRequestDto) {
-        User user = userRequestDto.toEntity(PasswordEncoder.encrypt(userRequestDto.getPassword()));
+        User user = userRequestDto.toEntity(passwordEncoder.encode(userRequestDto.getPassword()));
         User savedUser = userRepository.save(user);
 
-        readingSpaceService.create(new ReadingSpaceRequestDto("MyReadingSpace", "", OpenType.PUBLIC, null), savedUser);
+        readingSpaceService.createInitialSpace(new ReadingSpaceRequestDto("MyReadingSpace", "", OpenType.PUBLIC, null),
+            savedUser);
 
         return UserResponseDto.fromEntity(savedUser);
     }
@@ -51,9 +54,9 @@ public class UserService {
     }
 
     /**
-     * 사용자를 삭제 합니다.
-     * is_delete 컬럼을 True로 변경합니다.
-     * @param id
+     * 사용자를 삭제 합니다. is_delete 컬럼을 True로 변경합니다.
+     *
+     * @param id 사용자 id
      */
     public void delete(long id) {
         findById(id).delete();
@@ -61,6 +64,7 @@ public class UserService {
 
     /**
      * 사용자를 조회하고 리턴합니다.
+     *
      * @param id 사용자 ID
      * @return UserResponseDto
      */
@@ -69,8 +73,8 @@ public class UserService {
     }
 
     /**
-     * 사용자를 조회합니다.
-     * 사용자가 없으면 예외를 던집니다.
+     * 사용자를 조회합니다. 사용자가 없으면 예외를 던집니다.
+     *
      * @param id 사용자 ID
      * @return 사용자 엔티티
      */
@@ -79,9 +83,4 @@ public class UserService {
             .orElseThrow(UserNotFoundException::new);
     }
 
-    // TODO: 일시적으로 사용자 정보를 얻기 위해 만들어 놓은 메소드. 로그인 기능 이후 삭제
-    public User findByIdTemp(long id) {
-        return userRepository.findById(id)
-            .orElseThrow(UserNotFoundException::new);
-    }
 }
