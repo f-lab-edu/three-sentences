@@ -35,7 +35,6 @@ dependencies {
     implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.8'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation "org.assertj:assertj-core:3.12.2"
     testImplementation "org.junit.jupiter:junit-jupiter-params:5.4.2"
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
