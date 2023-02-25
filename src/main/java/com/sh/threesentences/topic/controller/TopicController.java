@@ -43,14 +43,11 @@ public class TopicController {
         EmailAuthentication auth) {
         return topicService.getTopics(readingSpaceId);
     }
-    
+
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{topic-id}")
     public void delete(@PathVariable("reading-space-id") Long readingSpaceId, @PathVariable("topic-id") Long topicId,
         EmailAuthentication auth) {
         topicService.delete(topicId, readingSpaceId, auth.getEmail());
-
     }
-
-
 }
