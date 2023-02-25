@@ -1,5 +1,7 @@
 package com.sh.threesentences.topic.entity;
 
+import static com.sh.threesentences.topic.exception.TopicErrorCode.TOPIC_NOT_FOUND;
+
 import com.sh.threesentences.common.entity.BaseEntity;
 import com.sh.threesentences.common.enums.OpenType;
 import com.sh.threesentences.readingspace.entity.ReadingSpace;
@@ -75,4 +77,9 @@ public class Topic extends BaseEntity {
         this.readingSpace = readingSpace;
     }
 
+    public void checkDelete() {
+        if (this.isDeleted()) {
+            throw new IllegalStateException(TOPIC_NOT_FOUND.getMessage());
+        }
+    }
 }
