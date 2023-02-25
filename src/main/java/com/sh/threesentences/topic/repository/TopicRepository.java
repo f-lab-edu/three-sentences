@@ -6,11 +6,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TopicRepository extends JpaRepository<Topic, Long> {
 
-    Topic findByIdAndDeletedFalse(Long topicId);
+    Topic findByIdAndIsDeletedFalse(Long topicId);
 
-    List<Topic> findByReadingSpaceIdAndDeletedFalse(Long readingSpaceId);
+    List<Topic> findByReadingSpaceIdAndIsDeletedFalse(Long readingSpaceId);
 
-    List<Topic> findAllByDeletedFalse();
+    List<Topic> findAllByIsDeletedFalse();
 
 
 }

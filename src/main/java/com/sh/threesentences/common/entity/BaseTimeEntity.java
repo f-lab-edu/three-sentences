@@ -23,7 +23,7 @@ public abstract class BaseTimeEntity {
     private LocalDateTime updatedAt;
 
     @Column
-    private boolean isDeleted = false;
+    private Boolean isDeleted = false;
 
     public void delete() {
         this.isDeleted = true;

@@ -25,6 +25,7 @@ public class TopicService {
     private final AuthorityService authorityService;
 
     public TopicResponseDto save(TopicRequestDto topicRequestDto, String email, Long readingSpaceId) {
+
         ReadingSpaceMemberRole readingSpaceMemberRole = authorityService.getReadingSpaceMemberRole(readingSpaceId,
             email);
         authorityService.checkRoleIsAdmin(readingSpaceMemberRole);
@@ -35,12 +36,12 @@ public class TopicService {
     }
 
     public TopicResponseDto getTopic(Long topicId) {
-        Topic topic = topicRepository.findByIdAndDeletedFalse(topicId);
+        Topic topic = topicRepository.findByIdAndIsDeletedFalse(topicId);
         return TopicResponseDto.fromEntity(topic);
     }
 
     public List<TopicResponseDto> getTopics(Long readingSpaceId) {
-        List<Topic> topics = topicRepository.findByReadingSpaceIdAndDeletedFalse(readingSpaceId);
+        List<Topic> topics = topicRepository.findByReadingSpaceIdAndIsDeletedFalse(readingSpaceId);
 
         return topics.stream()
             .map(TopicResponseDto::fromEntity)
@@ -48,7 +49,7 @@ public class TopicService {
     }
 
     public List<TopicResponseDto> getPublicTopics() {
-        List<Topic> topics = topicRepository.findAllByDeletedFalse();
+        List<Topic> topics = topicRepository.findAllByIsDeletedFalse();
         return topics.stream()
             .map(TopicResponseDto::fromEntity)
             .collect(Collectors.toList());

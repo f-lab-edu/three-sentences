@@ -78,7 +78,7 @@ public class Topic extends BaseEntity {
     }
 
     public void checkDelete() {
-        if (this.isDeleted()) {
+        if (this.getIsDeleted()) {
             throw new IllegalStateException(TOPIC_NOT_FOUND.getMessage());
         }
     }
