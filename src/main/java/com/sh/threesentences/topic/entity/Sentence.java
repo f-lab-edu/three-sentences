@@ -31,7 +31,7 @@ public class Sentence extends BaseEntity {
      * 작성자 id
      */
     @Column
-    private int userId;
+    private Long userId;
 
     /**
      * 문장에 대한 페이지
@@ -49,7 +49,7 @@ public class Sentence extends BaseEntity {
      * 문장 선정 이유
      */
     @Column
-    private String reason;
+    private String thoughts;
 
     /**
      * 좋아요 수
@@ -65,13 +65,13 @@ public class Sentence extends BaseEntity {
     private final List<Comment> comments = new ArrayList<>();
 
     @Builder
-    public Sentence(Long id, String name, int userId, int page, String sentence, String reason, int likes,
+    public Sentence(Long id, String name, Long userId, int page, String sentence, String thoughts, int likes,
         SubTopic subTopic) {
         this.id = id;
         this.userId = userId;
         this.page = page;
         this.sentence = sentence;
-        this.reason = reason;
+        this.thoughts = thoughts;
         this.likes = likes;
         this.subTopic = subTopic;
     }

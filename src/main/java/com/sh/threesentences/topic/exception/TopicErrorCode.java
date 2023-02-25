@@ -12,7 +12,9 @@ public enum TopicErrorCode {
 
     TOPIC_NOT_FOUND(BAD_REQUEST, "토픽이 존재하지 않습니다."),
 
-    SUBTOPIC_NOT_FOUND(BAD_REQUEST, "서브 토픽이 존재하지 않습니다.");
+    SUBTOPIC_NOT_FOUND(BAD_REQUEST, "서브 토픽이 존재하지 않습니다."),
+
+    EXCEED_THE_NUMBER_OF_SENTENCES(BAD_REQUEST, "하나의 서브 토픽에 대해서 최대 3개의 문장만 입력이 가능합니다.");
 
     private final HttpStatus httpStatus;
     private final String message;
