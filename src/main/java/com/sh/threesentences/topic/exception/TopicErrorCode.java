@@ -14,7 +14,11 @@ public enum TopicErrorCode {
 
     SUBTOPIC_NOT_FOUND(BAD_REQUEST, "서브 토픽이 존재하지 않습니다."),
 
-    EXCEED_THE_NUMBER_OF_SENTENCES(BAD_REQUEST, "하나의 서브 토픽에 대해서 최대 3개의 문장만 입력이 가능합니다.");
+    SENTENCE_NOT_FOUND(BAD_REQUEST, "문장이 존재하지 않습니다."),
+
+    EXCEED_THE_NUMBER_OF_SENTENCES(BAD_REQUEST, "하나의 서브 토픽에 대해서 최대 3개의 문장만 입력이 가능합니다."),
+
+    UNAUTHORIZED_TO_DELETE_SENTENCE(BAD_REQUEST, "본인이 작성한 문장만 삭제가 가능합니다.");
 
     private final HttpStatus httpStatus;
     private final String message;
