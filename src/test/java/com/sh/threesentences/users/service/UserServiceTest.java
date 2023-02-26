@@ -102,7 +102,7 @@ class UserServiceTest {
                 User deletedUser = userRepository.findById(USER_ID)
                     .orElseThrow(UserNotFoundException::new);
 
-                assertThat(deletedUser.isDeleted()).isTrue();
+                assertThat(deletedUser.getIsDeleted()).isTrue();
             }
         }
 

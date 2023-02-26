@@ -188,7 +188,7 @@ class ReadingSpaceServiceTest {
                 .willReturn(1);
 
             readingSpaceService.delete(READING_SPACE_ID, USER_EMAIL);
-            boolean deleted = USER_READING_MAPPINGS_FOR_DELETE_CONDITION_MET.getReadingSpace().isDeleted();
+            boolean deleted = USER_READING_MAPPINGS_FOR_DELETE_CONDITION_MET.getReadingSpace().getIsDeleted();
             assertThat(deleted).isTrue();
         }
 
