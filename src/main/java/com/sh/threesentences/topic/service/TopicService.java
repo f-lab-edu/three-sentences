@@ -2,6 +2,7 @@ package com.sh.threesentences.topic.service;
 
 import static com.sh.threesentences.topic.exception.TopicErrorCode.TOPIC_NOT_FOUND;
 
+import com.sh.threesentences.common.enums.OpenType;
 import com.sh.threesentences.readingspace.entity.ReadingSpaceMemberRole;
 import com.sh.threesentences.topic.dto.TopicRequestDto;
 import com.sh.threesentences.topic.dto.TopicResponseDto;
@@ -48,7 +49,7 @@ public class TopicService {
     }
 
     public List<TopicResponseDto> getPublicTopics() {
-        List<Topic> topics = topicRepository.findAllByIsDeletedFalseAndOpenTypePublic();
+        List<Topic> topics = topicRepository.findAllByIsDeletedFalseAndOpenType(OpenType.PUBLIC);
         return convertTopicToTopicResponseDto(topics);
     }
 

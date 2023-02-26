@@ -196,7 +196,7 @@ class TopicServiceTest {
 
             List<Topic> publicTopics = List.of(TOPIC, TOPIC_2, TOPIC_3);
 
-            given(topicRepository.findAllByIsDeletedFalseAndOpenTypePublic()).willReturn(
+            given(topicRepository.findAllByIsDeletedFalseAndOpenType(OpenType.PUBLIC)).willReturn(
                 publicTopics);
 
             List<TopicResponseDto> topics = topicService.getPublicTopics();

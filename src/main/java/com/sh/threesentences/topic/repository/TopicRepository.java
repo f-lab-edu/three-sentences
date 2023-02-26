@@ -1,5 +1,6 @@
 package com.sh.threesentences.topic.repository;
 
+import com.sh.threesentences.common.enums.OpenType;
 import com.sh.threesentences.topic.entity.Topic;
 import java.util.List;
 import java.util.Optional;
@@ -11,7 +12,6 @@ public interface TopicRepository extends JpaRepository<Topic, Long> {
 
     List<Topic> findByReadingSpaceIdAndIsDeletedFalse(Long readingSpaceId);
 
-    List<Topic> findAllByIsDeletedFalseAndOpenTypePublic();
-
+    List<Topic> findAllByIsDeletedFalseAndOpenType(OpenType openType);
 
 }
