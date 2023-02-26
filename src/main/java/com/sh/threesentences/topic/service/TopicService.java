@@ -36,7 +36,9 @@ public class TopicService {
     }
 
     public TopicResponseDto getTopic(Long topicId) {
-        Topic topic = topicRepository.findByIdAndIsDeletedFalse(topicId);
+        Topic topic = topicRepository.findByIdAndIsDeletedFalse(topicId)
+            .orElseThrow(
+                () -> new IllegalStateException(TOPIC_NOT_FOUND.getMessage()));
         return TopicResponseDto.fromEntity(topic);
     }
 
@@ -46,7 +48,7 @@ public class TopicService {
     }
 
     public List<TopicResponseDto> getPublicTopics() {
-        List<Topic> topics = topicRepository.findAllByIsDeletedFalse();
+        List<Topic> topics = topicRepository.findAllByIsDeletedFalseAndOpenTypePublic();
         return convertTopicToTopicResponseDto(topics);
     }
 

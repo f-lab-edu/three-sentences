@@ -69,7 +69,6 @@ public class TopicFixture {
         .openType(TOPIC_OPEN_TYPE)
         .build();
 
-
     public static SubTopic SUBTOPIC_1 = SubTopic.builder()
         .id(1L)
         .name("서브토픽 1")
@@ -88,4 +87,27 @@ public class TopicFixture {
         .topic(TOPIC)
         .build();
 
+    public static Topic TOPIC_2 = Topic.builder()
+        .id(2L)
+        .name("TOPCI_2")
+        .description("TOPIC_DESCRIPTION_2")
+        .naverBookId("TOPIC_NAVER_BOOK_ID_2")
+        .openType(OpenType.PUBLIC)
+        .build();
+
+    public static Topic TOPIC_3 = Topic.builder()
+        .id(3L)
+        .name("TOPCI_3")
+        .description("TOPIC_DESCRIPTION_3")
+        .naverBookId("TOPIC_NAVER_BOOK_ID_3")
+        .openType(OpenType.PUBLIC)
+        .build();
+
+    public static Topic TOPIC_4 = Topic.builder()
+        .id(4L)
+        .name("TOPCI_4")
+        .description("TOPIC_DESCRIPTION_4")
+        .naverBookId("TOPIC_NAVER_BOOK_ID_4")
+        .openType(OpenType.PRIVATE)
+        .build();
 }
