@@ -42,14 +42,15 @@ public class TopicService {
 
     public List<TopicResponseDto> getTopics(Long readingSpaceId) {
         List<Topic> topics = topicRepository.findByReadingSpaceIdAndIsDeletedFalse(readingSpaceId);
-
-        return topics.stream()
-            .map(TopicResponseDto::fromEntity)
-            .collect(Collectors.toList());
+        return convertTopicToTopicResponseDto(topics);
     }
 
     public List<TopicResponseDto> getPublicTopics() {
         List<Topic> topics = topicRepository.findAllByIsDeletedFalse();
+        return convertTopicToTopicResponseDto(topics);
+    }
+
+    private static List<TopicResponseDto> convertTopicToTopicResponseDto(List<Topic> topics) {
         return topics.stream()
             .map(TopicResponseDto::fromEntity)
             .collect(Collectors.toList());
