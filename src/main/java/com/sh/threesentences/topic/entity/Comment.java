@@ -29,13 +29,13 @@ public class Comment extends BaseEntity {
      * 작성자 id
      */
     @Column
-    private int userId;
+    private Long userId;
 
     /**
      * 문장 선정 이유
      */
     @Column
-    private String comment;
+    private String contents;
 
     /**
      * 좋아요 수
@@ -48,10 +48,10 @@ public class Comment extends BaseEntity {
     private Sentence sentence;
 
     @Builder
-    public Comment(Long id, String name, int userId, String comment, int likes, Sentence sentence) {
+    public Comment(Long id, String name, Long userId, String contents, int likes, Sentence sentence) {
         this.id = id;
         this.userId = userId;
-        this.comment = comment;
+        this.contents = contents;
         this.likes = likes;
         this.sentence = sentence;
     }
