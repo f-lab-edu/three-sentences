@@ -1,6 +1,7 @@
 package com.sh.threesentences.topic.exception;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
@@ -18,7 +19,9 @@ public enum TopicErrorCode {
 
     EXCEED_THE_NUMBER_OF_SENTENCES(BAD_REQUEST, "하나의 서브 토픽에 대해서 최대 3개의 문장만 입력이 가능합니다."),
 
-    UNAUTHORIZED_TO_DELETE_SENTENCE(BAD_REQUEST, "본인이 작성한 문장만 삭제가 가능합니다.");
+    UNAUTHORIZED_TO_DELETE_SENTENCE(UNAUTHORIZED, "본인이 작성한 문장만 삭제가 가능합니다."),
+
+    COMMENT_NOT_FOUND(BAD_REQUEST, "코멘트가 없습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;
