@@ -2,6 +2,8 @@ package com.sh.threesentences.topic.dto;
 
 import com.sh.threesentences.common.enums.OpenType;
 import com.sh.threesentences.topic.entity.Topic;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -10,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 public class TopicResponseDto {
 
     private final Long id;
-    
+
     private final String name;
 
     private final String description;
@@ -19,8 +21,16 @@ public class TopicResponseDto {
 
     private final OpenType openType;
 
+    private final List<SubTopicResponseDto> subTopics;
+
     public static TopicResponseDto fromEntity(Topic topic) {
-        return new TopicResponseDto(topic.getId(), topic.getName(), topic.getDescription(),
-            topic.getNaverBookId(), topic.getOpenType());
+
+        List<SubTopicResponseDto> subTopics = topic.getSubTopics()
+            .stream()
+            .map(SubTopicResponseDto::fromEntity)
+            .collect(Collectors.toList());
+
+        return new TopicResponseDto(topic.getId(), topic.getName(),
+            topic.getDescription(), topic.getIsbn(), topic.getOpenType(), subTopics);
     }
 }

@@ -47,10 +47,10 @@ public class Topic extends BaseEntity {
     private String description;
 
     /**
-     * 네이버 도서 API 조회를 위한 ID
+     * 도서 API 조회를 위한 식별자(ISBN)
      */
     @Column
-    private String naverBookId;
+    private String isbn;
 
     /**
      * 공개 여부
@@ -67,12 +67,12 @@ public class Topic extends BaseEntity {
     private final List<SubTopic> subTopics = new ArrayList<>();
 
     @Builder
-    public Topic(Long id, String name, String description, String naverBookId, OpenType openType,
+    public Topic(Long id, String name, String description, String isbn, OpenType openType,
         ReadingSpace readingSpace) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.naverBookId = naverBookId;
+        this.isbn = isbn;
         this.openType = openType;
         this.readingSpace = readingSpace;
     }
