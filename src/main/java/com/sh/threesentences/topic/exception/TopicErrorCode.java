@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 @Getter
 public enum TopicErrorCode {
 
-    UNAUTHORIZED_TO_CREATE_TOPIC(BAD_REQUEST, "스페이스 관리자만 토픽을 생성할 수 있습니다."),
+    UNAUTHORIZED_TO_CREATE_TOPIC(FORBIDDEN, "스페이스 관리자만 토픽을 생성할 수 있습니다."),
 
     TOPIC_NOT_FOUND(BAD_REQUEST, "토픽이 존재하지 않습니다."),
 

@@ -7,6 +7,7 @@ import static com.sh.threesentences.topic.exception.TopicErrorCode.TOPIC_NOT_FOU
 import static com.sh.threesentences.topic.exception.TopicErrorCode.UNAUTHORIZED_TO_DELETE_SENTENCE;
 import static com.sh.threesentences.users.exception.UserErrorCode.USER_NOT_FOUND;
 
+import com.sh.threesentences.common.exception.ForbiddenException;
 import com.sh.threesentences.topic.dto.SentenceRequestDto;
 import com.sh.threesentences.topic.dto.SentenceResponseDto;
 import com.sh.threesentences.topic.entity.Sentence;
@@ -136,7 +137,7 @@ public class SentenceService {
                 () -> new IllegalStateException(SENTENCE_NOT_FOUND.getMessage()));
 
         if (isWriterToThisSentence(user, sentence)) {
-            throw new IllegalStateException(UNAUTHORIZED_TO_DELETE_SENTENCE.getMessage());
+            throw new ForbiddenException(UNAUTHORIZED_TO_DELETE_SENTENCE.getMessage());
         }
 
         sentence.delete();
