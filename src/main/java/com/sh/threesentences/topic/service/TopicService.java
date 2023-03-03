@@ -37,19 +37,19 @@ public class TopicService {
     }
 
     public TopicResponseDto getTopic(Long topicId) {
-        Topic topic = topicRepository.findByIdAndIsDeletedFalse(topicId)
+        Topic topic = topicRepository.findById(topicId)
             .orElseThrow(
                 () -> new IllegalStateException(TOPIC_NOT_FOUND.getMessage()));
         return TopicResponseDto.fromEntity(topic);
     }
 
     public List<TopicResponseDto> getTopics(Long readingSpaceId) {
-        List<Topic> topics = topicRepository.findByReadingSpaceIdAndIsDeletedFalse(readingSpaceId);
+        List<Topic> topics = topicRepository.findByReadingSpaceId(readingSpaceId);
         return convertTopicToTopicResponseDto(topics);
     }
 
     public List<TopicResponseDto> getPublicTopics() {
-        List<Topic> topics = topicRepository.findAllByIsDeletedFalseAndOpenType(OpenType.PUBLIC);
+        List<Topic> topics = topicRepository.findAllByOpenType(OpenType.PUBLIC);
         return convertTopicToTopicResponseDto(topics);
     }
 

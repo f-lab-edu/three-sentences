@@ -147,7 +147,7 @@ class TopicServiceTest {
         @Test
         @DisplayName("ID에 해당하는 토픽 1개를 조회한다.")
         void getTopic() {
-            given(topicRepository.findByIdAndIsDeletedFalse(TOPIC_ID)).willReturn(Optional.of(TOPIC));
+            given(topicRepository.findById(TOPIC_ID)).willReturn(Optional.of(TOPIC));
 
             TopicResponseDto findTopic = topicService.getTopic(TOPIC_ID);
 
@@ -159,7 +159,7 @@ class TopicServiceTest {
         @Test
         @DisplayName("ID에 해당하는 토픽이 없으면 예외를 던진다.")
         void getTopicNotFound() {
-            given(topicRepository.findByIdAndIsDeletedFalse(NOT_FOUND_TOPIC_ID)).willReturn(Optional.empty());
+            given(topicRepository.findById(NOT_FOUND_TOPIC_ID)).willReturn(Optional.empty());
 
             assertThatThrownBy(() -> topicService.getTopic(NOT_FOUND_TOPIC_ID))
                 .isInstanceOf(IllegalStateException.class)
@@ -176,7 +176,7 @@ class TopicServiceTest {
         void getTopics() {
             assertFalse(TOPIC.getIsDeleted());
 
-            given(topicRepository.findByReadingSpaceIdAndIsDeletedFalse(READING_SPACE_ID)).willReturn(
+            given(topicRepository.findByReadingSpaceId(READING_SPACE_ID)).willReturn(
                 List.of(TOPIC_2, TOPIC_3, TOPIC_4));
 
             List<TopicResponseDto> topics = topicService.getTopics(READING_SPACE_ID);
@@ -196,7 +196,7 @@ class TopicServiceTest {
 
             List<Topic> publicTopics = List.of(TOPIC, TOPIC_2, TOPIC_3);
 
-            given(topicRepository.findAllByIsDeletedFalseAndOpenType(OpenType.PUBLIC)).willReturn(
+            given(topicRepository.findAllByOpenType(OpenType.PUBLIC)).willReturn(
                 publicTopics);
 
             List<TopicResponseDto> topics = topicService.getPublicTopics();
