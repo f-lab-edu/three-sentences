@@ -33,7 +33,7 @@ public class AuthorityService {
 
     public void checkRoleIsAdmin(ReadingSpaceMemberRole readingSpaceMemberRole) {
         if (!readingSpaceMemberRole.isAdmin()) {
-            throw new IllegalStateException(UNAUTHORIZED_TO_CREATE_TOPIC.getMessage());
+            throw new ForbiddenException(UNAUTHORIZED_TO_CREATE_TOPIC.getMessage());
         }
     }
 
