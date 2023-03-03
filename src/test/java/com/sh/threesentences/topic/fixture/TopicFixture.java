@@ -10,6 +10,7 @@ import com.sh.threesentences.topic.entity.SubTopic;
 import com.sh.threesentences.topic.entity.Topic;
 import com.sh.threesentences.users.entity.User;
 import com.sh.threesentences.users.enums.MembershipType;
+import java.util.ArrayList;
 
 public class TopicFixture {
 
@@ -29,7 +30,7 @@ public class TopicFixture {
 
     public static String TOPIC_DESCRIPTION = "this is for test.";
 
-    public static String TOPIC_NAVER_BOOK_ID = "1234567890";
+    public static String TOPIC_ISBN = "1234567890";
 
     public static OpenType TOPIC_OPEN_TYPE = OpenType.PUBLIC;
 
@@ -56,16 +57,16 @@ public class TopicFixture {
         new ReadingSpaceMemberRole(BASIC_USER, BASIC_READING_SPACE, UserRole.READINGMATE);
 
     public static TopicRequestDto TOPIC_REQUEST_DTO = new TopicRequestDto(TOPIC_NAME,
-        TOPIC_DESCRIPTION, TOPIC_NAVER_BOOK_ID, TOPIC_OPEN_TYPE);
+        TOPIC_DESCRIPTION, TOPIC_ISBN, TOPIC_OPEN_TYPE);
 
     public static TopicResponseDto TOPIC_RESPONSE_DTO = new TopicResponseDto(TOPIC_ID, TOPIC_NAME,
-        TOPIC_DESCRIPTION, TOPIC_NAVER_BOOK_ID, TOPIC_OPEN_TYPE);
+        TOPIC_DESCRIPTION, TOPIC_ISBN, TOPIC_OPEN_TYPE, new ArrayList<>());
 
     public static Topic TOPIC = Topic.builder()
         .id(TOPIC_ID)
         .name(TOPIC_NAME)
         .description(TOPIC_DESCRIPTION)
-        .naverBookId(TOPIC_NAVER_BOOK_ID)
+        .isbn(TOPIC_ISBN)
         .openType(TOPIC_OPEN_TYPE)
         .build();
 
@@ -91,7 +92,7 @@ public class TopicFixture {
         .id(2L)
         .name("TOPCI_2")
         .description("TOPIC_DESCRIPTION_2")
-        .naverBookId("TOPIC_NAVER_BOOK_ID_2")
+        .isbn("TOPIC_NAVER_BOOK_ID_2")
         .openType(OpenType.PUBLIC)
         .build();
 
@@ -99,7 +100,7 @@ public class TopicFixture {
         .id(3L)
         .name("TOPCI_3")
         .description("TOPIC_DESCRIPTION_3")
-        .naverBookId("TOPIC_NAVER_BOOK_ID_3")
+        .isbn("TOPIC_NAVER_BOOK_ID_3")
         .openType(OpenType.PUBLIC)
         .build();
 
@@ -107,7 +108,7 @@ public class TopicFixture {
         .id(4L)
         .name("TOPCI_4")
         .description("TOPIC_DESCRIPTION_4")
-        .naverBookId("TOPIC_NAVER_BOOK_ID_4")
+        .isbn("TOPIC_NAVER_BOOK_ID_4")
         .openType(OpenType.PRIVATE)
         .build();
 }

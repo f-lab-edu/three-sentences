@@ -1,9 +1,11 @@
 package com.sh.threesentences.topic.service;
 
+import static com.sh.threesentences.readingspace.exception.ReadingSpaceErrorCode.READING_SPACE_NOT_FOUND;
 import static com.sh.threesentences.topic.exception.TopicErrorCode.TOPIC_NOT_FOUND;
 
 import com.sh.threesentences.common.enums.OpenType;
-import com.sh.threesentences.readingspace.entity.ReadingSpaceMemberRole;
+import com.sh.threesentences.readingspace.entity.ReadingSpace;
+import com.sh.threesentences.readingspace.repository.ReadingSpaceRepository;
 import com.sh.threesentences.topic.dto.TopicRequestDto;
 import com.sh.threesentences.topic.dto.TopicResponseDto;
 import com.sh.threesentences.topic.entity.SubTopic;
@@ -23,15 +25,18 @@ public class TopicService {
 
     private final TopicRepository topicRepository;
 
+    private final ReadingSpaceRepository readingSpaceRepository;
+
     private final AuthorityService authorityService;
 
     public TopicResponseDto save(TopicRequestDto topicRequestDto, String email, Long readingSpaceId) {
 
-        ReadingSpaceMemberRole readingSpaceMemberRole = authorityService.getReadingSpaceMemberRole(readingSpaceId,
-            email);
-        authorityService.checkRoleIsAdmin(readingSpaceMemberRole);
+        authorityService.checkUserIsAdminInReadingSpace(readingSpaceId, email);
 
-        Topic savedTopic = topicRepository.save(topicRequestDto.toEntity(readingSpaceMemberRole.getReadingSpace()));
+        ReadingSpace readingSpace = readingSpaceRepository.findById(readingSpaceId)
+            .orElseThrow(() -> new IllegalStateException(READING_SPACE_NOT_FOUND.getMessage()));
+
+        Topic savedTopic = topicRepository.save(topicRequestDto.toEntity(readingSpace));
 
         return TopicResponseDto.fromEntity(savedTopic);
     }
@@ -53,12 +58,6 @@ public class TopicService {
         return convertTopicToTopicResponseDto(topics);
     }
 
-    private static List<TopicResponseDto> convertTopicToTopicResponseDto(List<Topic> topics) {
-        return topics.stream()
-            .map(TopicResponseDto::fromEntity)
-            .collect(Collectors.toList());
-    }
-
     public void delete(Long topicId, Long readingSpaceId, String email) {
         authorityService.checkUserIsAdminInReadingSpace(readingSpaceId, email);
 
@@ -71,5 +70,11 @@ public class TopicService {
         List<SubTopic> subTopics = topic.getSubTopics();
         subTopics.forEach(SubTopic::delete);
 
+    }
+
+    private static List<TopicResponseDto> convertTopicToTopicResponseDto(List<Topic> topics) {
+        return topics.stream()
+            .map(TopicResponseDto::fromEntity)
+            .collect(Collectors.toList());
     }
 }

@@ -2,8 +2,7 @@ package com.sh.threesentences.topic.service;
 
 import static com.sh.threesentences.topic.exception.TopicErrorCode.TOPIC_NOT_FOUND;
 import static com.sh.threesentences.topic.exception.TopicErrorCode.UNAUTHORIZED_TO_CREATE_TOPIC;
-import static com.sh.threesentences.topic.fixture.TopicFixture.ADMIN_USER_READINGSPACE_MEMBER_ROLE;
-import static com.sh.threesentences.topic.fixture.TopicFixture.BASIC_USER_READINGSPACE_MEMBER_ROLE;
+import static com.sh.threesentences.topic.fixture.TopicFixture.BASIC_READING_SPACE;
 import static com.sh.threesentences.topic.fixture.TopicFixture.NOT_FOUND_TOPIC_ID;
 import static com.sh.threesentences.topic.fixture.TopicFixture.READING_SPACE_ID;
 import static com.sh.threesentences.topic.fixture.TopicFixture.SUBTOPIC_1;
@@ -24,6 +23,8 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doThrow;
 
 import com.sh.threesentences.common.enums.OpenType;
+import com.sh.threesentences.common.exception.ForbiddenException;
+import com.sh.threesentences.readingspace.repository.ReadingSpaceRepository;
 import com.sh.threesentences.topic.dto.TopicResponseDto;
 import com.sh.threesentences.topic.entity.Topic;
 import com.sh.threesentences.topic.repository.TopicRepository;
@@ -48,6 +49,9 @@ class TopicServiceTest {
     @Mock
     private AuthorityService authorityService;
 
+    @Mock
+    private ReadingSpaceRepository readingSpaceRepository;
+
     @InjectMocks
     private TopicService topicService;
 
@@ -63,8 +67,7 @@ class TopicServiceTest {
             @Test
             void createTopic() {
 
-                given(authorityService.getReadingSpaceMemberRole(READING_SPACE_ID, USER_EMAIL))
-                    .willReturn(ADMIN_USER_READINGSPACE_MEMBER_ROLE);
+                given(readingSpaceRepository.findById(READING_SPACE_ID)).willReturn(Optional.of(BASIC_READING_SPACE));
 
                 given(topicRepository.save(any(Topic.class))).will(invocation -> {
                     Topic topic = invocation.getArgument(0);
@@ -94,14 +97,11 @@ class TopicServiceTest {
             @Test
             void cannotCreateTopicWithoutAdminAuthority() {
 
-                given(authorityService.getReadingSpaceMemberRole(READING_SPACE_ID, USER_EMAIL))
-                    .willReturn(BASIC_USER_READINGSPACE_MEMBER_ROLE);
-
-                doThrow(new IllegalStateException(UNAUTHORIZED_TO_CREATE_TOPIC.getMessage())).when(authorityService)
-                    .checkRoleIsAdmin(BASIC_USER_READINGSPACE_MEMBER_ROLE);
+                doThrow(new ForbiddenException(UNAUTHORIZED_TO_CREATE_TOPIC.getMessage())).when(authorityService)
+                    .checkUserIsAdminInReadingSpace(READING_SPACE_ID, USER_EMAIL);
 
                 assertThatThrownBy(() -> topicService.save(TOPIC_REQUEST_DTO, USER_EMAIL, READING_SPACE_ID))
-                    .isInstanceOf(IllegalStateException.class)
+                    .isInstanceOf(ForbiddenException.class)
                     .hasMessage(UNAUTHORIZED_TO_CREATE_TOPIC.getMessage());
             }
         }
