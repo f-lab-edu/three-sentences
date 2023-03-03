@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface BookProvider {
 
-    List<Book> searchBooksByTitle(String title, int display, int start);
-    
+    List<Book> searchBooksByTitle(String title, int size, int page);
+
     Book findBookByISBN(String isbn);
 }

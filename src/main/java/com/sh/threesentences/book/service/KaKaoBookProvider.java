@@ -4,7 +4,7 @@ import static com.sh.threesentences.book.exception.BookErrorCode.BOOK_NOT_FOUND;
 import static com.sh.threesentences.book.exception.BookErrorCode.SEARCH_DUPLICATE_BOOK;
 
 import com.sh.threesentences.book.dto.Book;
-import com.sh.threesentences.book.dto.NaverBookResponseDto;
+import com.sh.threesentences.book.dto.KaKaoBookResponseDto;
 import java.net.URI;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,16 +17,16 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
-public class NaverBookProvider implements BookProvider {
+public class KaKaoBookProvider implements BookProvider {
 
-    @Value("${api.naver.url}")
-    private String naverApiUrl;
+    @Value("${api.kakao.url}")
+    private String kakaoApiUrl;
 
-    @Value("${api.naver.id}")
-    private String naverApiId;
+    @Value("${api.kakao.rest-api-key}")
+    private String kakaoApiKey;
 
-    @Value("${api.naver.secret}")
-    private String naverApiSecret;
+    @Value("${api.kakao.authorization-header-prefix}")
+    private String kakaoHeaderPrefix;
 
     @Override
     public List<Book> searchBooksByTitle(String title, int size, int page) {
@@ -34,17 +34,18 @@ public class NaverBookProvider implements BookProvider {
         HttpEntity<Void> httpEntityWithHeaders = getHttpEntityWithHeaders();
 
         URI uri = UriComponentsBuilder
-            .fromUriString(naverApiUrl)
-            .queryParam("d_titl", title)
-            .queryParam("display", size)
-            .queryParam("start", page)
+            .fromUriString(kakaoApiUrl)
+            .queryParam("target", "title")
+            .queryParam("query", title)
+            .queryParam("page", page)
+            .queryParam("size", size)
             .encode()
             .build()
             .toUri();
 
-        NaverBookResponseDto naverBookResponseDto = getBooks(uri, httpEntityWithHeaders);
+        KaKaoBookResponseDto kakaoBookResponseDto = getBooks(uri, httpEntityWithHeaders);
 
-        return naverBookResponseDto.getItems();
+        return kakaoBookResponseDto.toBooks();
     }
 
 
@@ -54,32 +55,32 @@ public class NaverBookProvider implements BookProvider {
         HttpEntity<Void> httpEntityWithHeaders = getHttpEntityWithHeaders();
 
         URI uri = UriComponentsBuilder
-            .fromUriString(naverApiUrl)
-            .queryParam("d_isbn", isbn)
+            .fromUriString(kakaoApiUrl)
+            .queryParam("target", "isbn")
+            .queryParam("query", isbn)
             .encode()
             .build()
             .toUri();
 
-        NaverBookResponseDto naverBookResponseDto = getBooks(uri, httpEntityWithHeaders);
+        KaKaoBookResponseDto kakaoBookResponseDto = getBooks(uri, httpEntityWithHeaders);
 
-        List<Book> items = naverBookResponseDto.getItems();
-        validateResult(items);
+        List<Book> books = kakaoBookResponseDto.toBooks();
+        validateResult(books);
 
-        return items.get(0);
+        return books.get(0);
     }
 
-    private NaverBookResponseDto getBooks(URI uri, HttpEntity<Void> requestWithHeaders) {
+    private KaKaoBookResponseDto getBooks(URI uri, HttpEntity<Void> requestWithHeaders) {
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<NaverBookResponseDto> responseEntity = restTemplate.exchange(uri, HttpMethod.GET,
-            requestWithHeaders, NaverBookResponseDto.class);
+        ResponseEntity<KaKaoBookResponseDto> responseEntity = restTemplate.exchange(uri, HttpMethod.GET,
+            requestWithHeaders, KaKaoBookResponseDto.class);
 
         return responseEntity.getBody();
     }
 
     private HttpEntity<Void> getHttpEntityWithHeaders() {
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.set("X-Naver-Client-Id", naverApiId);
-        httpHeaders.set("X-Naver-Client-Secret", naverApiSecret);
+        httpHeaders.set("Authorization", kakaoHeaderPrefix + " " + kakaoApiKey);
         return new HttpEntity<>(httpHeaders);
     }
 

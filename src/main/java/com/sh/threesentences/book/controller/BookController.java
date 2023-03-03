@@ -1,7 +1,7 @@
 package com.sh.threesentences.book.controller;
 
 import com.sh.threesentences.book.dto.Book;
-import com.sh.threesentences.book.service.BookProvider;
+import com.sh.threesentences.book.service.KaKaoBookProvider;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.repository.query.Param;
@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class BookController {
 
-    private final BookProvider bookProvider;
+    private final KaKaoBookProvider bookProvider;
 
     @GetMapping("search")
-    public List<Book> searchBooksByTitle(@Param("title") String title, @Param("display") int display,
-        @Param("start") int start) {
-        return bookProvider.searchBooksByTitle(title, display, start);
+    public List<Book> searchBooksByTitle(@Param("title") String title, @Param("size") int size,
+        @Param("page") int page) {
+        return bookProvider.searchBooksByTitle(title, size, page);
     }
 
     @GetMapping()
