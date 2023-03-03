@@ -17,7 +17,7 @@ public class TopicResponseDto {
 
     private final String description;
 
-    private final String naverBookId;
+    private final String isbn;
 
     private final OpenType openType;
 

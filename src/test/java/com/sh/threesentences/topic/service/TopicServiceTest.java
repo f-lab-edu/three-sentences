@@ -72,7 +72,7 @@ class TopicServiceTest {
                         .id(TOPIC_ID)
                         .name(topic.getName())
                         .description(topic.getDescription())
-                        .naverBookId(topic.getNaverBookId())
+                        .isbn(topic.getIsbn())
                         .openType(topic.getOpenType())
                         .build();
                 });
@@ -153,7 +153,7 @@ class TopicServiceTest {
 
             assertThat(TOPIC.getName()).isEqualTo(findTopic.getName());
             assertThat(TOPIC.getDescription()).isEqualTo(findTopic.getDescription());
-            assertThat(TOPIC.getNaverBookId()).isEqualTo(findTopic.getNaverBookId());
+            assertThat(TOPIC.getIsbn()).isEqualTo(findTopic.getIsbn());
         }
 
         @Test

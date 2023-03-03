@@ -25,7 +25,7 @@ public class TopicRequestDto {
         return Topic.builder()
             .name(this.name)
             .description(this.description)
-            .naverBookId(this.naverBookId)
+            .isbn(this.naverBookId)
             .openType(this.openType)
             .readingSpace(readingSpace)
             .build();
