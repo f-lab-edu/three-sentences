@@ -37,10 +37,9 @@ public class SubTopicService {
         topic.checkDelete();
 
         SubTopic subTopic = subTopicRequestDto.toEntity(topic);
+        SubTopic savedTopic = subTopicRepository.save(subTopic);
 
-        subTopicRepository.save(subTopic);
-
-        return SubTopicResponseDto.fromEntity(subTopic);
+        return SubTopicResponseDto.fromEntity(savedTopic);
     }
 
     public void delete(Long readingSpaceId, Long subtopicId, String email) {
