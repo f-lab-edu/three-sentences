@@ -38,6 +38,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 
 @DisplayName("TopicService는 ")
 @ExtendWith(MockitoExtension.class)
@@ -195,11 +198,14 @@ class TopicServiceTest {
             assertFalse(TOPIC.getIsDeleted());
 
             List<Topic> publicTopics = List.of(TOPIC, TOPIC_2, TOPIC_3);
+            Page<Topic> pagedResponse = new PageImpl(publicTopics);
 
-            given(topicRepository.findAllByOpenType(OpenType.PUBLIC)).willReturn(
-                publicTopics);
+            PageRequest pageRequest = PageRequest.of(0, 10);
+            
+            given(topicRepository.findAllByOpenType(OpenType.PUBLIC, pageRequest)).willReturn(
+                pagedResponse);
 
-            List<TopicResponseDto> topics = topicService.getPublicTopics();
+            List<TopicResponseDto> topics = topicService.getPublicTopics(pageRequest);
 
             assertThat(topics).hasSize(3);
             assertThat(topics).extracting("openType").containsOnly(OpenType.PUBLIC);
