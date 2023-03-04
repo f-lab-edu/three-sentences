@@ -15,6 +15,9 @@ import com.sh.threesentences.users.service.AuthorityService;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,9 +56,10 @@ public class TopicService {
         return convertTopicToTopicResponseDto(topics);
     }
 
-    public List<TopicResponseDto> getPublicTopics() {
-        List<Topic> topics = topicRepository.findAllByOpenType(OpenType.PUBLIC);
-        return convertTopicToTopicResponseDto(topics);
+    public List<TopicResponseDto> getPublicTopics(Pageable pageable) {
+        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize());
+        Page<Topic> pagingTopics = topicRepository.findAllByOpenType(OpenType.PUBLIC, pageRequest);
+        return convertTopicToTopicResponseDto(pagingTopics.getContent());
     }
 
     public void delete(Long topicId, Long readingSpaceId, String email) {
