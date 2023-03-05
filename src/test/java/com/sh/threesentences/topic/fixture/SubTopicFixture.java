@@ -67,9 +67,9 @@ public class SubTopicFixture {
         .description(TOPIC_DESCRIPTION)
         .isbn(TOPIC_ISBN)
         .openType(TOPIC_OPEN_TYPE)
+        .readingSpace(BASIC_READING_SPACE)
         .build();
-
-
+    
     public static SubTopic SUBTOPIC_1 = SubTopic.builder()
         .id(1L)
         .name("서브토픽 1")

@@ -33,7 +33,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-@DisplayName("SubTopicService는 ")
+
+@DisplayName("* SubTopicService")
 @ExtendWith(MockitoExtension.class)
 class SubTopicServiceTest {
 
@@ -50,65 +51,59 @@ class SubTopicServiceTest {
     private SubTopicService subTopicService;
 
     @Nested
-    @DisplayName("save 메소드는")
+    @DisplayName("** save method")
     class ContextSaveMethod {
 
-        @Nested
-        @DisplayName("정상적으로 요청이 온 경우")
-        class ContextSaveValidRequest {
 
-            @DisplayName("서브 토픽을 생성 후 리턴한다.")
-            @Test
-            void createSubTopic() {
+        @DisplayName("└ 서브 토픽을 생성 후 리턴한다.")
+        @Test
+        void createSubTopic() {
 
-                given(topicRepository.findById(TOPIC_ID)).willReturn(Optional.of(TOPIC));
+            given(topicRepository.findById(TOPIC_ID)).willReturn(Optional.of(TOPIC));
 
-                given(subTopicRepository.save(any(SubTopic.class))).will(invocation -> {
-                    SubTopic subTopic = invocation.getArgument(0);
-                    return SubTopic.builder()
-                        .id(SUBTOPIC_ID)
-                        .name(subTopic.getName())
-                        .description(subTopic.getDescription())
-                        .startPage(subTopic.getStartPage())
-                        .endPage(subTopic.getEndPage())
-                        .build();
-                });
+            given(subTopicRepository.save(any(SubTopic.class))).will(invocation -> {
+                SubTopic subTopic = invocation.getArgument(0);
+                return SubTopic.builder()
+                    .id(SUBTOPIC_ID)
+                    .name(subTopic.getName())
+                    .description(subTopic.getDescription())
+                    .startPage(subTopic.getStartPage())
+                    .endPage(subTopic.getEndPage())
+                    .topic(subTopic.getTopic())
+                    .build();
+            });
 
-                SubTopicResponseDto savedTopic = subTopicService.save(SUBTOPIC_REQUEST_DTO, USER_EMAIL,
-                    READING_SPACE_ID,
-                    TOPIC_ID);
+            SubTopicResponseDto savedTopic = subTopicService.save(SUBTOPIC_REQUEST_DTO, USER_EMAIL,
+                READING_SPACE_ID,
+                TOPIC_ID);
 
-                assertThat(savedTopic.getName()).isEqualTo(SUBTOPIC_REQUEST_DTO.getName());
-                assertThat(savedTopic.getDescription()).isEqualTo(SUBTOPIC_REQUEST_DTO.getDescription());
-                assertThat(savedTopic.getStartPage()).isEqualTo(SUBTOPIC_REQUEST_DTO.getStartPage());
-                assertThat(savedTopic.getEndPage()).isEqualTo(SUBTOPIC_REQUEST_DTO.getEndPage());
-            }
+            assertThat(savedTopic.getName()).isEqualTo(SUBTOPIC_REQUEST_DTO.getName());
+            assertThat(savedTopic.getDescription()).isEqualTo(SUBTOPIC_REQUEST_DTO.getDescription());
+            assertThat(savedTopic.getStartPage()).isEqualTo(SUBTOPIC_REQUEST_DTO.getStartPage());
+            assertThat(savedTopic.getEndPage()).isEqualTo(SUBTOPIC_REQUEST_DTO.getEndPage());
         }
 
-        @Nested
-        @DisplayName("비정상적으로 요청이 온 경우")
-        class ContextSaveInValidRequest {
 
-            @DisplayName("사용자가 해당 ReadingSpace의 관리자가 아니라면 예외를 던진다.")
-            @Test
-            void cannotCreateSubTopicWithoutAdminAuthority() {
-                doThrow(new ForbiddenException(UNAUTHORIZED_TO_CREATE_TOPIC.getMessage())).when(authorityService)
-                    .checkUserIsAdminInReadingSpace(READING_SPACE_ID, USER_EMAIL);
+        @DisplayName("└ 사용자가 해당 ReadingSpace의 관리자가 아니라면 예외를 던진다.")
+        @Test
+        void cannotCreateSubTopicWithoutAdminAuthority() {
+            doThrow(new ForbiddenException(UNAUTHORIZED_TO_CREATE_TOPIC.getMessage())).when(authorityService)
+                .checkUserIsAdminInReadingSpace(READING_SPACE_ID, USER_EMAIL);
 
-                assertThatThrownBy(
-                    () -> subTopicService.save(SUBTOPIC_REQUEST_DTO, USER_EMAIL, READING_SPACE_ID, TOPIC_ID))
-                    .isInstanceOf(ForbiddenException.class)
-                    .hasMessage(UNAUTHORIZED_TO_CREATE_TOPIC.getMessage());
-            }
+            assertThatThrownBy(
+                () -> subTopicService.save(SUBTOPIC_REQUEST_DTO, USER_EMAIL, READING_SPACE_ID, TOPIC_ID))
+                .isInstanceOf(ForbiddenException.class)
+                .hasMessage(UNAUTHORIZED_TO_CREATE_TOPIC.getMessage());
         }
+
     }
 
     @Nested
-    @DisplayName("delete 메소드는")
+    @DisplayName("** delete method")
     class ContextDeleteMethod {
 
         @Test
-        @DisplayName("서브 토픽을 삭제한다.")
+        @DisplayName("└ 서브 토픽을 삭제한다.")
         void deleteTopic() {
             assertFalse(SUBTOPIC_1.getIsDeleted());
 
@@ -119,7 +114,7 @@ class SubTopicServiceTest {
         }
 
         @Test
-        @DisplayName("삭제할 토픽이 없으면 예외를 던진다.")
+        @DisplayName("└ 삭제할 토픽이 없으면 예외를 던진다.")
         void deleteTopicNotFound() {
             given(subTopicRepository.findById(NOT_FOUND_SUBTOPIC_ID)).willReturn(Optional.empty());
 

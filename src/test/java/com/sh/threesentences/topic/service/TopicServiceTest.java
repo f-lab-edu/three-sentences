@@ -80,6 +80,7 @@ class TopicServiceTest {
                         .description(topic.getDescription())
                         .isbn(topic.getIsbn())
                         .openType(topic.getOpenType())
+                        .readingSpace(topic.getReadingSpace())
                         .build();
                 });
 
@@ -201,7 +202,7 @@ class TopicServiceTest {
             Page<Topic> pagedResponse = new PageImpl(publicTopics);
 
             PageRequest pageRequest = PageRequest.of(0, 10);
-            
+
             given(topicRepository.findAllByOpenType(OpenType.PUBLIC, pageRequest)).willReturn(
                 pagedResponse);
 
