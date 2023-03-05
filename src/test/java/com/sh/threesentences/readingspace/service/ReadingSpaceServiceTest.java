@@ -42,7 +42,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-@DisplayName("ReadingSpaceService는")
+@DisplayName("* ReadingSpaceService")
 class ReadingSpaceServiceTest {
 
     @Mock
@@ -67,48 +67,45 @@ class ReadingSpaceServiceTest {
     }
 
     @Nested
-    @DisplayName("create 메소드는")
+    @DisplayName("** create method")
     class ContextCreatedMethod {
 
-        @Nested
-        @DisplayName("정상적으로 요청이 온 경우")
-        class ContextSaveValidReadingspace {
 
-            @DisplayName("ReadingSpace를 생성 후 리턴한다.")
-            @Test
-            void createReadingSpace() {
+        @DisplayName("└ ReadingSpace를 생성 후 리턴한다.")
+        @Test
+        void createReadingSpace() {
 
-                given(userRepository.findByEmail(USER_EMAIL)).willReturn(Optional.ofNullable(USER_1));
+            given(userRepository.findByEmail(USER_EMAIL)).willReturn(Optional.ofNullable(USER_1));
 
-                given(readingSpaceRepository.save(any(ReadingSpace.class))).will(invocation -> {
-                    ReadingSpace readingSpace = invocation.getArgument(0);
-                    return ReadingSpace.builder()
-                        .id(null)
-                        .name(readingSpace.getName())
-                        .description(readingSpace.getDescription())
-                        .openType(readingSpace.getOpenType())
-                        .profileImageUrl(readingSpace.getProfileImageUrl())
-                        .build();
-                });
+            given(readingSpaceRepository.save(any(ReadingSpace.class))).will(invocation -> {
+                ReadingSpace readingSpace = invocation.getArgument(0);
+                return ReadingSpace.builder()
+                    .id(null)
+                    .name(readingSpace.getName())
+                    .description(readingSpace.getDescription())
+                    .openType(readingSpace.getOpenType())
+                    .profileImageUrl(readingSpace.getProfileImageUrl())
+                    .build();
+            });
 
-                ReadingSpaceResponseDto readingSpaceResponseDto = readingSpaceService.create(
-                    validReadingSpaceRequestDto, USER_EMAIL);
+            ReadingSpaceResponseDto readingSpaceResponseDto = readingSpaceService.create(
+                validReadingSpaceRequestDto, USER_EMAIL);
 
-                assertThat(readingSpaceResponseDto.getName()).isEqualTo(validReadingSpaceResponseDto.getName());
-                assertThat(readingSpaceResponseDto.getDescription()).isEqualTo(
-                    validReadingSpaceResponseDto.getDescription());
-                assertThat(readingSpaceResponseDto.getOpenType()).isEqualTo(validReadingSpaceResponseDto.getOpenType());
-                assertThat(readingSpaceResponseDto.getProfileImageUrl()).isEqualTo(
-                    validReadingSpaceResponseDto.getProfileImageUrl());
-            }
+            assertThat(readingSpaceResponseDto.getName()).isEqualTo(validReadingSpaceResponseDto.getName());
+            assertThat(readingSpaceResponseDto.getDescription()).isEqualTo(
+                validReadingSpaceResponseDto.getDescription());
+            assertThat(readingSpaceResponseDto.getOpenType()).isEqualTo(validReadingSpaceResponseDto.getOpenType());
+            assertThat(readingSpaceResponseDto.getProfileImageUrl()).isEqualTo(
+                validReadingSpaceResponseDto.getProfileImageUrl());
         }
     }
 
+
     @Nested
-    @DisplayName("getPublicReadingSpaces 메소드는")
+    @DisplayName("** getPublicReadingSpaces method")
     class ContextGetPublicReadingSpacesMethod {
 
-        @DisplayName("공개된 전체 ReadingSpace를 조회한다.")
+        @DisplayName("└ 공개된 전체 ReadingSpace를 조회한다.")
         @Test
         void getPublicReadingSpaces() {
             given(readingSpaceRepository.findAllByOpenType(OpenType.PUBLIC)).willReturn(
@@ -127,17 +124,17 @@ class ReadingSpaceServiceTest {
     }
 
     @Nested
-    @DisplayName("update 메소드는")
+    @DisplayName("** update method")
     class ContextUpdateMethod {
 
-        @DisplayName("ReadingSpace 정보를 업데이트 한다.")
+        @DisplayName("└ ReadingSpace 정보를 업데이트 한다.")
         @Test
         void update_readingspace() {
             // JPA의 변경 감지에 의해 업데이트가 되는데,
             // 서비스가 잘 동작하는지를 목적으로 하는 테스트에서 해당 테스트를 하는게 맞을까?
         }
 
-        @DisplayName("업데이트할 ReadingSpace가 없는 경우, 예외를 던진다.")
+        @DisplayName("└ 업데이트할 ReadingSpace가 없는 경우, 예외를 던진다.")
         @Test
         void not_found_readingspace_for_update() {
             given(readingSpaceRepository.findById(UNUSED_READING_SPACE_ID)).willReturn(Optional.empty());
@@ -149,10 +146,10 @@ class ReadingSpaceServiceTest {
     }
 
     @Nested
-    @DisplayName("getMyReadingSpaces 메소드는")
+    @DisplayName("** getMyReadingSpaces method")
     class ContextGetMyReadingSpaceMethod {
 
-        @DisplayName("특정 사용자의 readingspace를 조회한다.")
+        @DisplayName("└ 특정 사용자의 readingspace를 조회한다.")
         @Test
         void getMyReadingSpaces() {
 
@@ -169,10 +166,10 @@ class ReadingSpaceServiceTest {
     }
 
     @Nested
-    @DisplayName("delete 메소드는")
+    @DisplayName("** delete method")
     class ContextDeleteMethod {
 
-        @DisplayName("ReadingSpace를 삭제한다.")
+        @DisplayName("└ ReadingSpace를 삭제한다.")
         @Test
         void delete_reading_space() {
 
@@ -192,7 +189,7 @@ class ReadingSpaceServiceTest {
             assertThat(deleted).isTrue();
         }
 
-        @DisplayName("삭제할 ReadingSpace가 없는 경우, 예외를 던진다.")
+        @DisplayName("└ 삭제할 ReadingSpace가 없는 경우, 예외를 던진다.")
         @Test
         void not_found_readingspace_for_update() {
             given(userRepository.findByEmail(USER_EMAIL)).willReturn(Optional.ofNullable(USER_1));
@@ -205,7 +202,7 @@ class ReadingSpaceServiceTest {
                 .hasMessage(READING_SPACE_NOT_FOUND.getMessage());
         }
 
-        @DisplayName("ReadingSpace에 다른 멤버가 존재하는 경우, 예외를 던진다.")
+        @DisplayName("└ ReadingSpace에 다른 멤버가 존재하는 경우, 예외를 던진다.")
         @Test
         void delete_condition_not_met_1() {
 
@@ -222,7 +219,7 @@ class ReadingSpaceServiceTest {
                 .hasMessage(MEMBER_IS_STILL_IN_SPACE.getMessage());
         }
 
-        @DisplayName("ReadingSpace에 멤버가 1명이지만 어드민이 아닌 경우, 예외를 던진다.")
+        @DisplayName("└ ReadingSpace에 멤버가 1명이지만 어드민이 아닌 경우, 예외를 던진다.")
         @Test
         void delete_condition_not_met_2() {
             given(userRepository.findByEmail(USER_EMAIL)).willReturn(Optional.ofNullable(USER_1));

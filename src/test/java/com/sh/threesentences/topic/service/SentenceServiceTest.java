@@ -71,7 +71,7 @@ class SentenceServiceTest {
     @DisplayName("** save method")
     class ContextSaveMethod {
 
-        @DisplayName("문장을 등록 후 리턴한다.")
+        @DisplayName("└ 문장을 등록 후 리턴한다.")
         @Test
         void createTopic() {
 
@@ -99,7 +99,7 @@ class SentenceServiceTest {
             assertThat(savedSentence.getThoughts()).isEqualTo(SENTENCE_REQUEST_DTO.getThoughts());
         }
 
-        @DisplayName("1개의 서브토픽에 등록된 문장이 3개 이상이면 예외를 던진다.")
+        @DisplayName("└ 1개의 서브토픽에 등록된 문장이 3개 이상이면 예외를 던진다.")
         @Test
         void createTopicWhenSentenceCountOverThree() {
 
@@ -121,7 +121,7 @@ class SentenceServiceTest {
     @DisplayName("** getSentencesBySubtopic method")
     class ContextGetSentencesBySubtopicMethod {
 
-        @DisplayName("서브토픽에 등록된 문장을 조회한다.")
+        @DisplayName("└ 서브토픽에 등록된 문장을 조회한다.")
         @Test
         void getSentencesBySubtopic() {
 
@@ -133,7 +133,7 @@ class SentenceServiceTest {
             assertThat(sentencesBySubtopic.size()).isEqualTo(SENTENCES_LIST_FOR_SUBTOPIC_1.size());
         }
 
-        @DisplayName("서브토픽에 등록된 문장이 없다면 빈 리스트를 조회하게 된다.")
+        @DisplayName("└ 서브토픽에 등록된 문장이 없다면 빈 리스트를 조회하게 된다.")
         @Test
         void getSentencesBySubtopicWhenNoSentences() {
 
@@ -153,7 +153,7 @@ class SentenceServiceTest {
     class ContextGetMySentencesBySubTopicMethod {
 
 
-        @DisplayName("사용자가 서브토픽에 등록한 문장을 조회한다.")
+        @DisplayName("└ 사용자가 서브토픽에 등록한 문장을 조회한다.")
         @Test
         void getMySentencesBySubtopic() {
             given(userRepository.findByEmail(USER_EMAIL)).willReturn(Optional.of(BASIC_USER));
@@ -167,7 +167,7 @@ class SentenceServiceTest {
             assertThat(mySentencesBySubtopic.size()).isEqualTo(SENTENCES_LIST_FOR_SUBTOPIC_1.size() - 1);
         }
 
-        @DisplayName("사용자가 서브토픽에 등록된 문장이 없다면 빈 리스트를 조회하게 된다.")
+        @DisplayName("└ 사용자가 서브토픽에 등록된 문장이 없다면 빈 리스트를 조회하게 된다.")
         @Test
         void getMySentencesBySubtopicWhenNoSentences() {
             given(userRepository.findByEmail(USER_EMAIL_WITH_NO_SENTENCE)).willReturn(
@@ -188,7 +188,7 @@ class SentenceServiceTest {
     @DisplayName("** getSentencesByTopic method")
     class ContextGetSentencesByTopicMethod {
 
-        @DisplayName("토픽에 등록된 전체 문장을 조회한다.")
+        @DisplayName("└ 토픽에 등록된 전체 문장을 조회한다.")
         @Test
         void getSentencesByTopic() {
 
@@ -211,7 +211,7 @@ class SentenceServiceTest {
     @DisplayName("** getMySentencesByTopic method")
     class ContextGetMySentencesByTopicMethod {
 
-        @DisplayName("사용자가 토픽에 등록한 모든 문장을 조회한다.")
+        @DisplayName("└ 사용자가 토픽에 등록한 모든 문장을 조회한다.")
         @Test
         void getMySentencesByTopic() {
             given(userRepository.findByEmail(USER_EMAIL)).willReturn(Optional.of(BASIC_USER));
@@ -235,7 +235,7 @@ class SentenceServiceTest {
     @DisplayName("** deleteSentence method")
     class ContextDeleteSentenceMethod {
 
-        @DisplayName("선택한 문장을 삭제한다.")
+        @DisplayName("└ 선택한 문장을 삭제한다.")
         @Test
         void deleteSentences() {
 
@@ -249,19 +249,19 @@ class SentenceServiceTest {
             assertTrue(SENTENCE_1.getIsDeleted());
         }
 
-        @DisplayName("존재하지 않는 문장을 삭제하려하면 예외를 던진다.")
+        @DisplayName("└ 존재하지 않는 문장을 삭제하려하면 예외를 던진다.")
         @Test
         void deleteNotFoundSentence() {
 
             given(userRepository.findByEmail(USER_EMAIL)).willReturn(Optional.of(BASIC_USER));
             given(sentenceRepository.findById(SENTENCE_ID_NOT_EXISTS)).willReturn(Optional.empty());
-            
+
             Assertions.assertThatThrownBy(() -> sentenceService.deleteSentence(SENTENCE_ID_NOT_EXISTS, USER_EMAIL))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessage(SENTENCE_NOT_FOUND.getMessage());
         }
 
-        @DisplayName("문장을 작성한 사용자가 삭제를 시도할 때 예외를 던진다.")
+        @DisplayName("└ 문장을 작성한 사용자가 삭제를 시도할 때 예외를 던진다.")
         @Test
         void unAuthorizedToDeleteSentence() {
             given(userRepository.findByEmail(USER_EMAIL_WITH_NO_SENTENCE)).willReturn(

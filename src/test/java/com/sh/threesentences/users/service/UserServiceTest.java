@@ -25,7 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-@DisplayName("UserService의 ")
+@DisplayName("* UserService")
 class UserServiceTest {
 
     @Autowired
@@ -48,75 +48,57 @@ class UserServiceTest {
     }
 
     @Nested
-    @DisplayName("save 메소드는")
+    @DisplayName("** save method")
     class ContextSaveMethod {
 
-        @Nested
-        @DisplayName("회원 등록 요청이 정상적으로 온 경우")
-        class ContextSaveValidUser {
+        @DisplayName("└ 사용자를 등록 후 리턴한다.")
+        @Test
+        void saveUser() {
+            UserResponseDto savedUser = userService.save(VALID_REQUEST);
 
-            @DisplayName("사용자를 등록 후 리턴한다.")
-            @Test
-            void saveUser() {
-                UserResponseDto savedUser = userService.save(VALID_REQUEST);
-
-                assertThat(savedUser.getEmail()).isEqualTo(VALID_EMAIL);
-                assertThat(savedUser.getName()).isEqualTo(VALID_NAME);
-                assertThat(savedUser.getMembership()).isEqualTo(DEFAULT_MEMBERSHIP);
-            }
+            assertThat(savedUser.getEmail()).isEqualTo(VALID_EMAIL);
+            assertThat(savedUser.getName()).isEqualTo(VALID_NAME);
+            assertThat(savedUser.getMembership()).isEqualTo(DEFAULT_MEMBERSHIP);
         }
     }
 
+
     @Nested
-    @DisplayName("checkEmailDuplicated 메소드는")
+    @DisplayName("** checkEmailDuplicated method")
     class ContextEmailDuplicateCheckMethod {
 
-        @Nested
-        @DisplayName("이메일이 중복인 경우")
-        class ContextSaveInvalidUser {
-
-            @DisplayName("EmailDuplicateException 예외를 던진다.")
-            @Test
-            void saveUser() {
-                userService.save(VALID_REQUEST);
-                assertThatThrownBy(() -> userService.checkEmailDuplicated(VALID_EMAIL))
-                    .isInstanceOf(EmailDuplicateException.class)
-                    .hasMessageContaining(UserErrorCode.EMAIL_DUPLICATE.getMessage());
-            }
+        @DisplayName("└ 이메일이 중복인 경우 EmailDuplicateException 예외를 던진다.")
+        @Test
+        void saveUser() {
+            userService.save(VALID_REQUEST);
+            assertThatThrownBy(() -> userService.checkEmailDuplicated(VALID_EMAIL))
+                .isInstanceOf(EmailDuplicateException.class)
+                .hasMessageContaining(UserErrorCode.EMAIL_DUPLICATE.getMessage());
         }
     }
 
     @Nested
-    @DisplayName("delete 메소드는")
+    @DisplayName("** delete method")
     class ContextDeleteMethod {
 
-        @Nested
-        @DisplayName("요청된 사용자가 등록되어 있으면")
-        class ContextDeleteUser {
+        @DisplayName("└ 요청된 사용자가 등록되어 있으면 사용자 엔티티의 is_delete 컬럼을 true로 변경한다.")
+        @Test
+        void deleteUser() {
+            userService.save(VALID_REQUEST);
+            userService.delete(USER_ID);
+            User deletedUser = userRepository.findById(USER_ID)
+                .orElseThrow(UserNotFoundException::new);
 
-            @DisplayName("사용자 엔티티의 is_delete 컬럼을 true로 변경한다.")
-            @Test
-            void deleteUser() {
-                userService.save(VALID_REQUEST);
-                userService.delete(USER_ID);
-                User deletedUser = userRepository.findById(USER_ID)
-                    .orElseThrow(UserNotFoundException::new);
-
-                assertThat(deletedUser.getIsDeleted()).isTrue();
-            }
+            assertThat(deletedUser.getIsDeleted()).isTrue();
         }
 
-        @Nested
-        @DisplayName("요청된 사용자가 등록되어 있지 않으면")
-        class ContextDeleteNotExistingUser {
-
-            @DisplayName("UserNotFoundException 예외를 던진다.")
-            @Test
-            void saveUser() {
-                assertThatThrownBy(() -> userService.delete(UNUSED_ID))
-                    .isInstanceOf(UserNotFoundException.class)
-                    .hasMessageContaining(UserErrorCode.USER_NOT_FOUND.getMessage());
-            }
+        @DisplayName("└ 요청된 사용자가 등록되어 있지 않으면 UserNotFoundException 예외를 던진다.")
+        @Test
+        void saveUser() {
+            assertThatThrownBy(() -> userService.delete(UNUSED_ID))
+                .isInstanceOf(UserNotFoundException.class)
+                .hasMessageContaining(UserErrorCode.USER_NOT_FOUND.getMessage());
         }
     }
+
 }

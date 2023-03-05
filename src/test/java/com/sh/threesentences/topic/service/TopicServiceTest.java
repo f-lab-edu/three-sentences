@@ -42,7 +42,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
-@DisplayName("TopicService는 ")
+@DisplayName("* TopicService")
 @ExtendWith(MockitoExtension.class)
 class TopicServiceTest {
 
@@ -59,64 +59,57 @@ class TopicServiceTest {
     private TopicService topicService;
 
     @Nested
-    @DisplayName("save 메소드는")
+    @DisplayName("** save method")
     class ContextSaveMethod {
 
-        @Nested
-        @DisplayName("정상적으로 요청이 온 경우")
-        class ContextSaveValidRequest {
 
-            @DisplayName("토픽을 생성 후 리턴한다.")
-            @Test
-            void createTopic() {
+        @DisplayName("└ 토픽을 생성 후 리턴한다.")
+        @Test
+        void createTopic() {
 
-                given(readingSpaceRepository.findById(READING_SPACE_ID)).willReturn(Optional.of(BASIC_READING_SPACE));
+            given(readingSpaceRepository.findById(READING_SPACE_ID)).willReturn(Optional.of(BASIC_READING_SPACE));
 
-                given(topicRepository.save(any(Topic.class))).will(invocation -> {
-                    Topic topic = invocation.getArgument(0);
-                    return Topic.builder()
-                        .id(TOPIC_ID)
-                        .name(topic.getName())
-                        .description(topic.getDescription())
-                        .isbn(topic.getIsbn())
-                        .openType(topic.getOpenType())
-                        .readingSpace(topic.getReadingSpace())
-                        .build();
-                });
+            given(topicRepository.save(any(Topic.class))).will(invocation -> {
+                Topic topic = invocation.getArgument(0);
+                return Topic.builder()
+                    .id(TOPIC_ID)
+                    .name(topic.getName())
+                    .description(topic.getDescription())
+                    .isbn(topic.getIsbn())
+                    .openType(topic.getOpenType())
+                    .readingSpace(topic.getReadingSpace())
+                    .build();
+            });
 
-                TopicResponseDto result = topicService.save(TOPIC_REQUEST_DTO, USER_EMAIL, READING_SPACE_ID);
+            TopicResponseDto result = topicService.save(TOPIC_REQUEST_DTO, USER_EMAIL, READING_SPACE_ID);
 
-                assertThat(result.getName()).isEqualTo(TOPIC_REQUEST_DTO.getName());
-                assertThat(result.getDescription()).isEqualTo(TOPIC_REQUEST_DTO.getDescription());
-                assertThat(result.getOpenType()).isEqualTo(TOPIC_REQUEST_DTO.getOpenType());
+            assertThat(result.getName()).isEqualTo(TOPIC_REQUEST_DTO.getName());
+            assertThat(result.getDescription()).isEqualTo(TOPIC_REQUEST_DTO.getDescription());
+            assertThat(result.getOpenType()).isEqualTo(TOPIC_REQUEST_DTO.getOpenType());
 
-            }
         }
 
-        @Nested
-        @DisplayName("비정상적으로 요청이 온 경우")
-        class ContextSaveInValidRequest {
 
-            @DisplayName("사용자가 해당 ReadingSpace의 관리자가 아니라면 예외를 던진다.")
-            @Test
-            void cannotCreateTopicWithoutAdminAuthority() {
+        @DisplayName("└ 사용자가 해당 ReadingSpace의 관리자가 아니라면 예외를 던진다.")
+        @Test
+        void cannotCreateTopicWithoutAdminAuthority() {
 
-                doThrow(new ForbiddenException(UNAUTHORIZED_TO_CREATE_TOPIC.getMessage())).when(authorityService)
-                    .checkUserIsAdminInReadingSpace(READING_SPACE_ID, USER_EMAIL);
+            doThrow(new ForbiddenException(UNAUTHORIZED_TO_CREATE_TOPIC.getMessage())).when(authorityService)
+                .checkUserIsAdminInReadingSpace(READING_SPACE_ID, USER_EMAIL);
 
-                assertThatThrownBy(() -> topicService.save(TOPIC_REQUEST_DTO, USER_EMAIL, READING_SPACE_ID))
-                    .isInstanceOf(ForbiddenException.class)
-                    .hasMessage(UNAUTHORIZED_TO_CREATE_TOPIC.getMessage());
-            }
+            assertThatThrownBy(() -> topicService.save(TOPIC_REQUEST_DTO, USER_EMAIL, READING_SPACE_ID))
+                .isInstanceOf(ForbiddenException.class)
+                .hasMessage(UNAUTHORIZED_TO_CREATE_TOPIC.getMessage());
         }
+
     }
 
     @Nested
-    @DisplayName("delete 메소드는")
+    @DisplayName("** delete method")
     class ContextDeleteMethod {
 
         @Test
-        @DisplayName("토픽과 서브 토픽을 모두 삭제 시킨다.")
+        @DisplayName("└ 토픽과 서브 토픽을 모두 삭제 시킨다.")
         void deleteTopic() {
             assertFalse(TOPIC.getIsDeleted());
             assertFalse(SUBTOPIC_1.getIsDeleted());
@@ -132,7 +125,7 @@ class TopicServiceTest {
         }
 
         @Test
-        @DisplayName("삭제할 토픽이 없으면 예외를 던진다.")
+        @DisplayName("└ 삭제할 토픽이 없으면 예외를 던진다.")
         void deleteTopicNotFound() {
             given(topicRepository.findById(NOT_FOUND_TOPIC_ID)).willReturn(Optional.empty());
 
@@ -143,11 +136,11 @@ class TopicServiceTest {
     }
 
     @Nested
-    @DisplayName("getTopic 메소드는")
+    @DisplayName("** getTopic method")
     class ContextGetTopicMethod {
 
         @Test
-        @DisplayName("ID에 해당하는 토픽 1개를 조회한다.")
+        @DisplayName("└ ID에 해당하는 토픽 1개를 조회한다.")
         void getTopic() {
             given(topicRepository.findById(TOPIC_ID)).willReturn(Optional.of(TOPIC));
 
@@ -159,7 +152,7 @@ class TopicServiceTest {
         }
 
         @Test
-        @DisplayName("ID에 해당하는 토픽이 없으면 예외를 던진다.")
+        @DisplayName("└ ID에 해당하는 토픽이 없으면 예외를 던진다.")
         void getTopicNotFound() {
             given(topicRepository.findById(NOT_FOUND_TOPIC_ID)).willReturn(Optional.empty());
 
@@ -170,11 +163,11 @@ class TopicServiceTest {
     }
 
     @Nested
-    @DisplayName("getTopics 메소드는")
+    @DisplayName("** getTopics method")
     class ContextGetTopicsMethod {
 
         @Test
-        @DisplayName("ReadingSpace에 속하는 모든 토픽을 조회한다.")
+        @DisplayName("└ ReadingSpace에 속하는 모든 토픽을 조회한다.")
         void getTopics() {
             assertFalse(TOPIC.getIsDeleted());
 
@@ -188,11 +181,11 @@ class TopicServiceTest {
     }
 
     @Nested
-    @DisplayName("getPublicTopics 메소드는")
+    @DisplayName("** getPublicTopics method")
     class ContextGetPublicTopicsMethod {
 
         @Test
-        @DisplayName("공개된 모든 토픽을 조회한다.")
+        @DisplayName("└ 공개된 모든 토픽을 조회한다.")
         void getPublicTopics() {
             assertFalse(TOPIC.getIsDeleted());
 

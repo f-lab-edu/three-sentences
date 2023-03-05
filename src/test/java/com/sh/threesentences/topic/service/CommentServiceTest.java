@@ -43,51 +43,43 @@ class CommentServiceTest {
 
 
     @Nested
-    @DisplayName("* save method")
+    @DisplayName("** save method")
     class ContextSaveMethod {
 
-        @Nested
-        @DisplayName("[정상 요청]")
-        class ContextSaveValidRequest {
+        @DisplayName("└ 댓글을 등록 후 리턴한다.")
+        @Test
+        void createSubTopic() {
 
-            @DisplayName("댓글을 등록 후 리턴한다.")
-            @Test
-            void createSubTopic() {
+            given(sentenceRepository.findById(SENTENCE_1.getId())).willReturn(Optional.of(SENTENCE_1));
 
-                given(sentenceRepository.findById(SENTENCE_1.getId())).willReturn(Optional.of(SENTENCE_1));
+            given(commentRepository.save(any(Comment.class))).will(invocation -> {
+                Comment comment = invocation.getArgument(0);
+                return Comment.builder()
+                    .id(COMMENT_1_ID)
+                    .userId(comment.getUserId())
+                    .contents(comment.getContents())
+                    .likes(comment.getLikes())
+                    .sentence(comment.getSentence())
+                    .build();
+            });
 
-                given(commentRepository.save(any(Comment.class))).will(invocation -> {
-                    Comment comment = invocation.getArgument(0);
-                    return Comment.builder()
-                        .id(COMMENT_1_ID)
-                        .userId(comment.getUserId())
-                        .contents(comment.getContents())
-                        .likes(comment.getLikes())
-                        .sentence(comment.getSentence())
-                        .build();
-                });
+            CommentResponseDto savedComment = commentService.save(COMMENT_REQUEST_DTO);
 
-                CommentResponseDto savedComment = commentService.save(COMMENT_REQUEST_DTO);
-
-                assertThat(savedComment.getContents()).isEqualTo(COMMENT_REQUEST_DTO.getContents());
-            }
+            assertThat(savedComment.getContents()).isEqualTo(COMMENT_REQUEST_DTO.getContents());
         }
 
-        @Nested
-        @DisplayName("[비정상적 요청]")
-        class ContextSaveInValidRequest {
 
-            @DisplayName("댓글을 등록하려는 문장이 존재하지 않으면")
-            @Test
-            void cannotCreateCommentWhenSentenceIsNotValid() {
-                given(sentenceRepository.findById(SentenceFixture.SENTENCE_ID_NOT_EXISTS)).willReturn(Optional.empty());
+        @DisplayName("└ 댓글을 등록하려는 문장이 존재하지 않으면")
+        @Test
+        void cannotCreateCommentWhenSentenceIsNotValid() {
+            given(sentenceRepository.findById(SentenceFixture.SENTENCE_ID_NOT_EXISTS)).willReturn(Optional.empty());
 
-                assertThatThrownBy(
-                    () -> commentService.save(COMMENT_REQUEST_DTO_WITH_NOT_EXISTS_SENTENCE))
-                    .isInstanceOf(IllegalStateException.class)
-                    .hasMessage(SENTENCE_NOT_FOUND.getMessage());
-            }
+            assertThatThrownBy(
+                () -> commentService.save(COMMENT_REQUEST_DTO_WITH_NOT_EXISTS_SENTENCE))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessage(SENTENCE_NOT_FOUND.getMessage());
         }
+
     }
 
 
@@ -96,7 +88,7 @@ class CommentServiceTest {
     class ContextDeleteMethod {
 
         @Test
-        @DisplayName("댓글을 삭제한다.")
+        @DisplayName("└ 댓글을 삭제한다.")
         void deleteTopic() {
             assertFalse(COMMENT_1.getIsDeleted());
 
@@ -107,7 +99,7 @@ class CommentServiceTest {
         }
 
         @Test
-        @DisplayName("삭제할 댓글이 없으면 예외를 던진다.")
+        @DisplayName("└ 삭제할 댓글이 없으면 예외를 던진다.")
         void deleteTopicNotFound() {
             given(commentRepository.findById(COMMENT_1_ID)).willReturn(Optional.empty());
 
