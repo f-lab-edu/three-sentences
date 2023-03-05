@@ -127,10 +127,8 @@ class TopicServiceTest {
             topicService.delete(TOPIC_ID, READING_SPACE_ID, USER_EMAIL);
 
             assertTrue(TOPIC.getIsDeleted());
-
-            // TODO
-            // assertTrue(SUBTOPIC_1.getIsDeleted());
-            // assertTrue(SUBTOPIC_2.getIsDeleted());
+            assertTrue(SUBTOPIC_1.getIsDeleted());
+            assertTrue(SUBTOPIC_2.getIsDeleted());
         }
 
         @Test
