@@ -76,4 +76,8 @@ public class ReadingSpace extends BaseEntity {
         this.openType = readingSpaceRequestDto.getOpenType();
         this.profileImageUrl = readingSpaceRequestDto.getProfileImageUrl();
     }
+
+    public void addTopics(Topic topic) {
+        topics.add(topic);
+    }
 }

@@ -76,12 +76,26 @@ public class Topic extends BaseEntity {
         this.description = description;
         this.isbn = isbn;
         this.openType = openType;
-        this.readingSpace = readingSpace;
+        this.readingSpace = setReadingSpace(readingSpace);
     }
 
     public void checkDelete() {
         if (this.getIsDeleted()) {
             throw new IllegalStateException(TOPIC_NOT_FOUND.getMessage());
         }
+    }
+
+    private ReadingSpace setReadingSpace(ReadingSpace readingSpace) {
+        if (this.readingSpace != null) {
+            this.readingSpace.getTopics().remove(this);
+        }
+        this.readingSpace = readingSpace;
+        readingSpace.addTopics(this);
+
+        return readingSpace;
+    }
+
+    public void addSubtopics(SubTopic subTopic) {
+        subTopics.add(subTopic);
     }
 }

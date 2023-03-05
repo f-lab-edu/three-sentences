@@ -65,7 +65,7 @@ public class Sentence extends BaseEntity {
     private final List<Comment> comments = new ArrayList<>();
 
     @Builder
-    public Sentence(Long id, String name, Long userId, int page, String sentence, String thoughts, int likes,
+    public Sentence(Long id, Long userId, int page, String sentence, String thoughts, int likes,
         SubTopic subTopic) {
         this.id = id;
         this.userId = userId;
@@ -73,6 +73,20 @@ public class Sentence extends BaseEntity {
         this.sentence = sentence;
         this.thoughts = thoughts;
         this.likes = likes;
+        this.subTopic = setSubTopic(subTopic);
+    }
+
+    private SubTopic setSubTopic(SubTopic subTopic) {
+        if (this.subTopic != null) {
+            this.subTopic.getSentences().remove(this);
+        }
         this.subTopic = subTopic;
+        subTopic.addSentences(this);
+
+        return subTopic;
+    }
+
+    public void addComments(Comment comment) {
+        comments.add(comment);
     }
 }

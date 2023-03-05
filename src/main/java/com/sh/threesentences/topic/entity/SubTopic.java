@@ -63,7 +63,21 @@ public class SubTopic extends BaseEntity {
         this.description = description;
         this.startPage = startPage;
         this.endPage = endPage;
+        this.topic = setTopic(topic);
+    }
+
+    private Topic setTopic(Topic topic) {
+        if (this.topic != null) {
+            this.topic.getSubTopics().remove(this);
+        }
         this.topic = topic;
+        topic.addSubtopics(this);
+
+        return topic;
+    }
+
+    public void addSentences(Sentence sentence) {
+        sentences.add(sentence);
     }
 
 }

@@ -53,6 +53,16 @@ public class Comment extends BaseEntity {
         this.userId = userId;
         this.contents = contents;
         this.likes = likes;
+        this.sentence = setSentence(sentence);
+    }
+    
+    private Sentence setSentence(Sentence sentence) {
+        if (this.sentence != null) {
+            this.sentence.getComments().remove(this);
+        }
         this.sentence = sentence;
+        sentence.addComments(this);
+
+        return sentence;
     }
 }
