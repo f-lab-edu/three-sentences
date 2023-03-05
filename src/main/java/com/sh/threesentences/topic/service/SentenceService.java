@@ -65,23 +65,22 @@ public class SentenceService {
         SubTopic subTopic = subTopicRepository.findById(subTopicId)
             .orElseThrow(
                 () -> new IllegalStateException(SUBTOPIC_NOT_FOUND.getMessage()));
-        List<Sentence> subTopics = sentenceRepository.findBySubTopic(subTopic);
+        List<Sentence> sentences = sentenceRepository.findBySubTopic(subTopic);
 
-        return subTopics.stream()
+        return sentences.stream()
             .map(SentenceResponseDto::fromEntity)
             .collect(Collectors.toList());
     }
 
-    public List<SentenceResponseDto> getMySentencesBySubTopic(Long topicId, String email) {
+    public List<SentenceResponseDto> getMySentencesBySubTopic(Long subTopicId, String email) {
         User user = findUserByEmail(email);
 
-        Topic topic = findTopicById(topicId);
+        SubTopic subTopic = subTopicRepository.findById(subTopicId)
+            .orElseThrow(
+                () -> new IllegalStateException(SUBTOPIC_NOT_FOUND.getMessage()));
+        List<Sentence> sentences = sentenceRepository.findBySubTopic(subTopic);
 
-        List<SubTopic> subTopics = subTopicRepository.findByTopic(topic);
-
-        return subTopics.stream()
-            .map(SubTopic::getSentences)
-            .flatMap(List::stream)
+        return sentences.stream()
             .filter(s -> s.getUserId().equals(user.getId()))
             .map(SentenceResponseDto::fromEntity)
             .collect(Collectors.toList());
