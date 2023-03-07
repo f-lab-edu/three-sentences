@@ -17,7 +17,7 @@ spring:
     driver-class-name: org.mariadb.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
     properties:
       hibernate:
         format_sql: true
@@ -34,9 +34,9 @@ api:
     id: iOMwmTfQ6ZAjYOdKoD3q
     secret: hSZpo4sQC7
   kakao:
-    url: soon
-    id: soon
-    secret: soon
+    url: https://dapi.kakao.com/v3/search/book
+    rest-api-key: 47822f452e5c465964b33d96ddda699b
+    authorization-header-prefix: KakaoAK
 
 ---
 spring:
