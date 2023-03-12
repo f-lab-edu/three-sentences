@@ -3,6 +3,8 @@ package com.sh.threesentences.readingspace.entity;
 import com.sh.threesentences.common.entity.BaseEntity;
 import com.sh.threesentences.common.enums.OpenType;
 import com.sh.threesentences.readingspace.dto.ReadingSpaceRequestDto;
+import com.sh.threesentences.topic.entity.Topic;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -54,7 +56,10 @@ public class ReadingSpace extends BaseEntity {
     private String profileImageUrl;
 
     @OneToMany(mappedBy = "readingSpace")
-    private List<ReadingSpaceMemberRole> readingSpaceMemberRole;
+    private final List<ReadingSpaceMemberRole> readingSpaceMemberRole = new ArrayList<>();
+
+    @OneToMany(mappedBy = "readingSpace")
+    private final List<Topic> topics = new ArrayList<>();
 
     @Builder
     public ReadingSpace(Long id, String name, String description, OpenType openType, String profileImageUrl) {
@@ -70,5 +75,9 @@ public class ReadingSpace extends BaseEntity {
         this.description = readingSpaceRequestDto.getDescription();
         this.openType = readingSpaceRequestDto.getOpenType();
         this.profileImageUrl = readingSpaceRequestDto.getProfileImageUrl();
+    }
+
+    public void addTopics(Topic topic) {
+        topics.add(topic);
     }
 }

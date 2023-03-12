@@ -97,8 +97,8 @@ public class ReadingSpaceFixture {
 
     public static List<ReadingSpaceMemberRole> USER_READING_MAPPINGS = List.of(
         new ReadingSpaceMemberRole(USER_1, READING_SPACE_1, UserRole.ADMIN),
-        new ReadingSpaceMemberRole(USER_1, READING_SPACE_2, UserRole.REDINGMATE),
-        new ReadingSpaceMemberRole(USER_1, READING_SPACE_3, UserRole.REDINGMATE)
+        new ReadingSpaceMemberRole(USER_1, READING_SPACE_2, UserRole.READINGMATE),
+        new ReadingSpaceMemberRole(USER_1, READING_SPACE_3, UserRole.READINGMATE)
     );
 
     public static int MY_READING_SPACES_SIZE = (int) USER_READING_MAPPINGS
@@ -111,9 +111,9 @@ public class ReadingSpaceFixture {
 
     public static List<ReadingSpaceMemberRole> USER_READING_MAPPINGS_FOR_DELETE_1 = List.of(
         new ReadingSpaceMemberRole(USER_1, READING_SPACE_1, UserRole.ADMIN),
-        new ReadingSpaceMemberRole(USER_2, READING_SPACE_1, UserRole.REDINGMATE)
+        new ReadingSpaceMemberRole(USER_2, READING_SPACE_1, UserRole.READINGMATE)
     );
 
     public static ReadingSpaceMemberRole USER_READING_MAPPINGS_FOR_DELETE_2 =
-        new ReadingSpaceMemberRole(USER_1, READING_SPACE_1, UserRole.REDINGMATE);
+        new ReadingSpaceMemberRole(USER_1, READING_SPACE_1, UserRole.READINGMATE);
 }

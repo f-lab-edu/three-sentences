@@ -17,7 +17,7 @@ spring:
     driver-class-name: org.mariadb.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: create-drop
     properties:
       hibernate:
         format_sql: true
@@ -28,6 +28,16 @@ spring:
 logging:
   level:
     org.hibernate.sql: debug
+api:
+  naver:
+    url: https://openapi.naver.com/v1/search/book_adv.json
+    id: iOMwmTfQ6ZAjYOdKoD3q
+    secret: hSZpo4sQC7
+  kakao:
+    url: https://dapi.kakao.com/v3/search/book
+    rest-api-key: 47822f452e5c465964b33d96ddda699b
+    authorization-header-prefix: KakaoAK
+
 ---
 spring:
   config:
