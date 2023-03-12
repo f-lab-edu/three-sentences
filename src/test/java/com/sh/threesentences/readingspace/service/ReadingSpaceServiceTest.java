@@ -23,6 +23,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 import com.sh.threesentences.common.enums.OpenType;
+import com.sh.threesentences.common.exception.ForbiddenException;
 import com.sh.threesentences.readingspace.dto.ReadingSpaceRequestDto;
 import com.sh.threesentences.readingspace.dto.ReadingSpaceResponseDto;
 import com.sh.threesentences.readingspace.entity.ReadingSpace;
@@ -137,9 +138,12 @@ class ReadingSpaceServiceTest {
         @DisplayName("└ 업데이트할 ReadingSpace가 없는 경우, 예외를 던진다.")
         @Test
         void not_found_readingspace_for_update() {
-            given(readingSpaceRepository.findById(UNUSED_READING_SPACE_ID)).willReturn(Optional.empty());
+            given(userRepository.findByEmail(USER_EMAIL)).willReturn(Optional.ofNullable(USER_1));
+            given(userReadingSpaceRepository.findByUserAndReadingSpaceId(USER_1, UNUSED_READING_SPACE_ID)).willReturn(
+                Optional.empty());
 
-            assertThatThrownBy(() -> readingSpaceService.update(VALID_READING_SPACE_REQUEST, UNUSED_READING_SPACE_ID))
+            assertThatThrownBy(
+                () -> readingSpaceService.update(VALID_READING_SPACE_REQUEST, UNUSED_READING_SPACE_ID, USER_EMAIL))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessage(READING_SPACE_NOT_FOUND.getMessage());
         }
@@ -228,7 +232,7 @@ class ReadingSpaceServiceTest {
                 Optional.ofNullable(USER_READING_MAPPINGS_FOR_DELETE_2));
 
             assertThatThrownBy(() -> readingSpaceService.delete(READING_SPACE_ID, USER_EMAIL))
-                .isInstanceOf(IllegalStateException.class)
+                .isInstanceOf(ForbiddenException.class)
                 .hasMessage(DELETE_ADMIN_ONLY.getMessage());
 
         }
