@@ -26,6 +26,7 @@ import com.sh.threesentences.users.dto.UserResponseDto;
 import com.sh.threesentences.users.entity.User;
 import com.sh.threesentences.users.exception.EmailDuplicateException;
 import com.sh.threesentences.users.exception.UserErrorCode;
+import com.sh.threesentences.users.exception.UserExceptionHandler;
 import com.sh.threesentences.users.exception.UserNotFoundException;
 import com.sh.threesentences.users.fixture.UserFixture;
 import com.sh.threesentences.users.service.UserService;
@@ -63,7 +64,8 @@ class UserControllerTest {
 
     @BeforeEach
     public void setUp() {
-        mockMvc = MockMvcUtil.createMockMvc(userController);
+        Object[] controllerAdvices = {new UserExceptionHandler()};
+        mockMvc = MockMvcUtil.createMockMvc(userController, controllerAdvices);
     }
 
     @DisplayName("** POST /api/v1/users")
