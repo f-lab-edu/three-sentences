@@ -47,7 +47,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -100,7 +99,6 @@ class ReadingSpaceControllerTest {
     class ContextGetMyReadingSpace {
 
         @DisplayName("└ 사용자가 속한 리딩 스페이스와 상태코드 200을 응답한다.")
-        @WithMockUser
         @Test
         void getMyReadingSpace() throws Exception {
 
@@ -201,7 +199,6 @@ class ReadingSpaceControllerTest {
     class ContextDeleteReadingSpace {
 
         @DisplayName("└ 리딩 스페이스를 삭제하고 상태코드 204을 응답한다.")
-        @WithMockUser
         @Test
         void getDeleteReadingSpace() throws Exception {
 
@@ -220,7 +217,6 @@ class ReadingSpaceControllerTest {
         }
 
         @DisplayName("└ 사용자 인증 정보가 조회가 안되면 에러 메시지와 상태코드 400을 응답한다.")
-        @WithMockUser
         @Test
         void getDeleteReadingSpaceWithInvalidUser() throws Exception {
 
@@ -249,7 +245,6 @@ class ReadingSpaceControllerTest {
         }
 
         @DisplayName("└ 리딩스페이스의 관리자가 아니면 에러 메시지와 상태코드 403을 응답한다.")
-        @WithMockUser
         @Test
         void deleteReadingSpaceWithoutAuthority() throws Exception {
 
@@ -274,7 +269,6 @@ class ReadingSpaceControllerTest {
         }
 
         @DisplayName("└ 리딩스페이스에 다른 유저가 있다면 삭제가 불가능하다. 에러 메시지와 상태코드 400을 응답한다.")
-        @WithMockUser
         @Test
         void deleteReadingSpace() throws Exception {
 
