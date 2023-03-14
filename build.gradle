@@ -24,6 +24,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator' // 스프링 액츄에이터
+
+    implementation 'io.micrometer:micrometer-registry-prometheus' // 마이크로미터 프로메테우스 구현체
 
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 

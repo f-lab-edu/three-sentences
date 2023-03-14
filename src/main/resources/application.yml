@@ -37,6 +37,17 @@ api:
     url: https://dapi.kakao.com/v3/search/book
     rest-api-key: 47822f452e5c465964b33d96ddda699b
     authorization-header-prefix: KakaoAK
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-components: always
+      show-details: always
+  server:
+    port: 9292
 
 ---
 spring:
