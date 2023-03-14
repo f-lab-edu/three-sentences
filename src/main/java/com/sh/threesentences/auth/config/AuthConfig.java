@@ -23,7 +23,7 @@ public class AuthConfig {
     public UserDetailsService userDetailsService() {
         return jpaUserDetailService;
     }
-    
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().disable();
@@ -32,6 +32,7 @@ public class AuthConfig {
             .antMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
             .antMatchers(HttpMethod.POST, "/api/v1/users").permitAll()
             .antMatchers(HttpMethod.GET, "/api/v1/users/email/duplicate-check").permitAll()
+            .antMatchers(HttpMethod.GET, "/actuator/**").permitAll()
             .anyRequest().authenticated()
             .and()
             .formLogin().disable()
