@@ -7,11 +7,11 @@ import com.sh.threesentences.readingspace.service.ReadingSpaceService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -44,15 +44,15 @@ public class ReadingSpaceController {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @PostMapping("/{id}/update")
+    @PutMapping("/{id}")
     public ReadingSpaceResponseDto updateReadingSpace(@PathVariable("id") Long id,
-        @RequestBody ReadingSpaceRequestDto readingSpaceRequestDto) {
-        return readingSpaceService.update(readingSpaceRequestDto, id);
+        @RequestBody ReadingSpaceRequestDto readingSpaceRequestDto, EmailAuthentication auth) {
+        return readingSpaceService.update(readingSpaceRequestDto, id, auth.getEmail());
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("{id}")
-    public void deleteReadingSpace(@PathVariable("id") Long id, Authentication auth) {
-        readingSpaceService.delete(id, auth.getName());
+    public void deleteReadingSpace(@PathVariable("id") Long id, EmailAuthentication auth) {
+        readingSpaceService.delete(id, auth.getEmail());
     }
 }

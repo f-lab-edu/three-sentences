@@ -5,6 +5,7 @@ import static com.sh.threesentences.readingspace.exception.ReadingSpaceErrorCode
 import static com.sh.threesentences.readingspace.exception.ReadingSpaceErrorCode.READING_SPACE_NOT_FOUND;
 
 import com.sh.threesentences.common.enums.OpenType;
+import com.sh.threesentences.common.exception.ForbiddenException;
 import com.sh.threesentences.readingspace.dto.ReadingSpaceRequestDto;
 import com.sh.threesentences.readingspace.dto.ReadingSpaceResponseDto;
 import com.sh.threesentences.readingspace.entity.ReadingSpace;
@@ -77,10 +78,18 @@ public class ReadingSpaceService {
             .collect(Collectors.toList());
     }
 
-    public ReadingSpaceResponseDto update(ReadingSpaceRequestDto readingSpaceRequestDto, Long id) {
-        ReadingSpace readingSpace = readingSpaceRepository.findById(id).orElseThrow(()
-            -> new IllegalStateException(READING_SPACE_NOT_FOUND.getMessage()));
+    public ReadingSpaceResponseDto update(ReadingSpaceRequestDto readingSpaceRequestDto, Long id, String email) {
+
+        User user = userRepository.findByEmail(email)
+            .orElseThrow(UserNotFoundException::new);
+
+        ReadingSpaceMemberRole readingSpaceMemberRole = userReadingSpaceRepository.findByUserAndReadingSpaceId(user, id)
+            .orElseThrow(()
+                -> new IllegalStateException(READING_SPACE_NOT_FOUND.getMessage()));
+
+        ReadingSpace readingSpace = readingSpaceMemberRole.getReadingSpace();
         readingSpace.update(readingSpaceRequestDto);
+        
         return ReadingSpaceResponseDto.fromEntity(readingSpace);
     }
 
@@ -102,7 +111,7 @@ public class ReadingSpaceService {
             .orElseThrow(() -> new IllegalStateException(READING_SPACE_NOT_FOUND.getMessage()));
 
         if (!spaceMemberRole.isAdmin()) {
-            throw new IllegalStateException(DELETE_ADMIN_ONLY.getMessage());
+            throw new ForbiddenException(DELETE_ADMIN_ONLY.getMessage());
         }
 
         int memberCount = userReadingSpaceRepository.countByReadingSpaceId(id);

@@ -11,6 +11,8 @@ import com.sh.threesentences.topic.entity.Topic;
 import com.sh.threesentences.users.entity.User;
 import com.sh.threesentences.users.enums.MembershipType;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class TopicFixture {
 
@@ -58,6 +60,12 @@ public class TopicFixture {
 
     public static TopicRequestDto TOPIC_REQUEST_DTO = new TopicRequestDto(TOPIC_NAME,
         TOPIC_DESCRIPTION, TOPIC_ISBN, TOPIC_OPEN_TYPE);
+
+    public static TopicRequestDto createTopicWithInvalidName(String invalidName) {
+        return new TopicRequestDto(invalidName,
+            TOPIC_DESCRIPTION, TOPIC_ISBN, TOPIC_OPEN_TYPE);
+    }
+
 
     public static TopicResponseDto TOPIC_RESPONSE_DTO = new TopicResponseDto(TOPIC_ID, TOPIC_NAME,
         TOPIC_DESCRIPTION, TOPIC_ISBN, TOPIC_OPEN_TYPE, new ArrayList<>());
@@ -115,4 +123,8 @@ public class TopicFixture {
         .openType(OpenType.PRIVATE)
         .readingSpace(BASIC_READING_SPACE)
         .build();
+
+    public static List<TopicResponseDto> TOPIC_RESPONSE_RESULTS = List.of(TOPIC, TOPIC_2, TOPIC_3, TOPIC_4).stream()
+        .map(TopicResponseDto::fromEntity)
+        .collect(Collectors.toList());
 }

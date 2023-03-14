@@ -9,6 +9,8 @@ import com.sh.threesentences.readingspace.enums.UserRole;
 import com.sh.threesentences.users.entity.User;
 import com.sh.threesentences.users.enums.MembershipType;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ReadingSpaceFixture {
 
@@ -91,6 +93,12 @@ public class ReadingSpaceFixture {
         READING_SPACE_4
     );
 
+    public static List<ReadingSpace> ALL_PUBLIC_SPACES = List.of(
+        READING_SPACE_1,
+        READING_SPACE_2,
+        READING_SPACE_4
+    );
+
     public static int PUBLIC_READING_SPACES_SIZE = (int) ALL_READING_SPACES
         .stream()
         .filter(s -> s.getOpenType().equals(OpenType.PUBLIC)).count();
@@ -104,6 +112,11 @@ public class ReadingSpaceFixture {
     public static int MY_READING_SPACES_SIZE = (int) USER_READING_MAPPINGS
         .stream()
         .filter(s -> s.getUser().getId().equals(USER_ID)).count();
+
+    public static List<ReadingSpaceResponseDto> USER1_READING_SPACE =
+        Stream.of(READING_SPACE_1, READING_SPACE_2, READING_SPACE_3)
+            .map(ReadingSpaceResponseDto::fromEntity)
+            .collect(Collectors.toList());
 
     public static ReadingSpaceMemberRole USER_READING_MAPPINGS_FOR_DELETE_CONDITION_MET =
         new ReadingSpaceMemberRole(USER_1, READING_SPACE_1, UserRole.ADMIN);

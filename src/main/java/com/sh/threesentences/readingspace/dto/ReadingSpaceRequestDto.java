@@ -2,20 +2,22 @@ package com.sh.threesentences.readingspace.dto;
 
 import com.sh.threesentences.common.enums.OpenType;
 import com.sh.threesentences.readingspace.entity.ReadingSpace;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @Getter
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 public class ReadingSpaceRequestDto {
 
-    private final String name;
+    private String name;
 
-    private final String description;
+    private String description;
 
-    private final OpenType openType;
+    private OpenType openType;
 
-    private final String profileImageUrl;
+    private String profileImageUrl;
 
     public ReadingSpace toEntity() {
         return ReadingSpace.builder()
