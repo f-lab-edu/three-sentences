@@ -48,7 +48,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-@DisplayName("* SubTopicService")
+@DisplayName("* SentenceService")
 @ExtendWith(MockitoExtension.class)
 class SentenceServiceTest {
 
