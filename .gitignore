@@ -38,6 +38,7 @@ out/
 
 ### prometheus ###
 /prometheus/volume
+/prometheus/config/query_log_file.log
 
 ### grafana ###
 /grafana/volume
