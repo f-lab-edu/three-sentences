@@ -1,6 +1,20 @@
 version: "3"
 
 services:
+  spring-boot:
+    build:
+      dockerfile: Dockerfile
+    depends_on:
+      - mysql
+    ports:
+      - "8080:8080"
+      - "9292:9292"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mariadb://mysql:3306/ts_database?allowPublicKeyRetrieval=true&useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: EVev123!@#
+    networks:
+      - docker-network
   mysql:
     image: mysql:5.7 # Mysql image
     container_name: mysql
@@ -11,8 +25,10 @@ services:
       - MYSQL_ROOT_PASSWORD=EVev123!@#
       - MYSQL_DATABASE=ts_database
     ports: # 호스트와 컨테이너 포트 매핑
-      - "13306:3306"
+      - "3306:3306"
     restart: unless-stopped # 컨테이너 다운 시 항상 재시작
+    networks:
+      - docker-network
   prometheus:
     image: prom/prometheus
     container_name: prometheus
@@ -26,7 +42,7 @@ services:
       - '--config.file=/etc/prometheus/prometheus.yml'
     restart: always
     networks:
-      - prometheus-grafana-net
+      - docker-network
   grafana:
     image: grafana/grafana
     container_name: grafana
@@ -36,8 +52,8 @@ services:
       - ./grafana/volume:/var/lib/grafana
     restart: always
     networks:
-      - prometheus-grafana-net
+      - docker-network
 
 networks:
-  prometheus-grafana-net:
+  docker-network:
     driver: bridge
