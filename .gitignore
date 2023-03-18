@@ -35,3 +35,12 @@ out/
 
 ### mysql ###
 /mysql/mysqldata
+
+### prometheus ###
+/prometheus/volume
+
+### grafana ###
+/grafana/volume
+
+### local logs ###
+/logs
