@@ -3,6 +3,8 @@ package com.sh.threesentences.users.fixture;
 import com.sh.threesentences.users.dto.EmailDuplicateCheckDto;
 import com.sh.threesentences.users.dto.UserRequestDto;
 import com.sh.threesentences.users.dto.UserResponseDto;
+import com.sh.threesentences.users.entity.User;
+import com.sh.threesentences.users.enums.AuthorityType;
 import com.sh.threesentences.users.enums.MembershipType;
 
 public class UserFixture {
@@ -15,11 +17,20 @@ public class UserFixture {
 
     public static String VALID_EMAIL = "abcd@gmail.com";
 
+    public static User USER = User.builder()
+        .email(VALID_EMAIL)
+        .name(VALID_NAME)
+        .membership(MembershipType.FREE)
+        .authorityType(AuthorityType.BASIC.getName())
+        .build();
+    
     public static String DUPLICATE_EMAIL = "abcd@gmail.com";
 
     public static String INVALID_EMAIL = "ejehejejgmail.com";
 
     public static String PASSWORD = "12345";
+
+    public static String ENCRYPTED_PASSWORD = "1234512345";
 
     public static MembershipType DEFAULT_MEMBERSHIP = MembershipType.FREE;
 
@@ -45,4 +56,5 @@ public class UserFixture {
     public static final UserRequestDto userRequestDtoWithInvalidNameOnly(String name) {
         return new UserRequestDto(VALID_EMAIL, name, "valid_password", MembershipType.BASIC);
     }
+
 }
