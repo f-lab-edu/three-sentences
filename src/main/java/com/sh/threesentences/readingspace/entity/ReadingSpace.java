@@ -80,4 +80,8 @@ public class ReadingSpace extends BaseEntity {
     public void addTopics(Topic topic) {
         topics.add(topic);
     }
+
+    public void addMemberRole(ReadingSpaceMemberRole memberRole) {
+        readingSpaceMemberRole.add(memberRole);
+    }
 }

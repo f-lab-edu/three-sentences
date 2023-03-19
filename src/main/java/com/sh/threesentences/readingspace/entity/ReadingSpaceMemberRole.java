@@ -38,8 +38,8 @@ public class ReadingSpaceMemberRole extends BaseEntity {
 
     public ReadingSpaceMemberRole(User user, ReadingSpace readingSpace, UserRole userRole) {
         this.id = new UserReadingSpaceMappingId(user.getId(), readingSpace.getId());
-        this.user = user;
-        this.readingSpace = readingSpace;
+        this.user = setUser(user);
+        this.readingSpace = setReadingSpace(readingSpace);
         this.userRole = userRole;
     }
 
@@ -47,4 +47,23 @@ public class ReadingSpaceMemberRole extends BaseEntity {
         return this.getUserRole().equals(UserRole.ADMIN);
     }
 
+    private ReadingSpace setReadingSpace(ReadingSpace readingSpace) {
+        if (this.readingSpace != null) {
+            this.readingSpace.getReadingSpaceMemberRole().remove(this);
+        }
+        this.readingSpace = readingSpace;
+        readingSpace.addMemberRole(this);
+
+        return readingSpace;
+    }
+
+    private User setUser(User user) {
+        if (this.user != null) {
+            this.user.getReadingSpaceMemberRole().remove(this);
+        }
+        this.user = user;
+        user.addMemberRole(this);
+
+        return user;
+    }
 }
