@@ -5,12 +5,16 @@ import com.sh.threesentences.book.dto.NaverBookResponseDto;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
+@Qualifier("naverBookProvider")
 public class NaverBookProvider implements BookProvider {
 
     @Value("${api.naver.url}")
@@ -21,6 +25,12 @@ public class NaverBookProvider implements BookProvider {
 
     @Value("${api.naver.secret}")
     private String naverApiSecret;
+
+    private final RestTemplate restTemplate;
+
+    public NaverBookProvider(RestTemplateBuilder restTemplateBuilder) {
+        restTemplate = restTemplateBuilder.build();
+    }
 
     @Override
     public List<Book> searchBooksByTitle(String title, int size, int page) {
@@ -37,7 +47,8 @@ public class NaverBookProvider implements BookProvider {
             .build()
             .toUri();
 
-        NaverBookResponseDto naverBookResponseDto = getBooks(uri, httpEntityWithHeaders, NaverBookResponseDto.class);
+        NaverBookResponseDto naverBookResponseDto = getBooks(uri, httpEntityWithHeaders, NaverBookResponseDto.class,
+            restTemplate);
 
         return naverBookResponseDto.getItems();
     }
@@ -55,7 +66,8 @@ public class NaverBookProvider implements BookProvider {
             .build()
             .toUri();
 
-        NaverBookResponseDto naverBookResponseDto = getBooks(uri, httpEntityWithHeaders, NaverBookResponseDto.class);
+        NaverBookResponseDto naverBookResponseDto = getBooks(uri, httpEntityWithHeaders, NaverBookResponseDto.class,
+            restTemplate);
 
         List<Book> items = naverBookResponseDto.getItems();
         validateResultByIsbn(items);

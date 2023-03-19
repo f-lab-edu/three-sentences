@@ -5,12 +5,16 @@ import com.sh.threesentences.book.dto.KaKaoBookResponseDto;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
+@Qualifier("kakaoBookProvider")
 public class KaKaoBookProvider implements BookProvider {
 
     @Value("${api.kakao.url}")
@@ -21,6 +25,12 @@ public class KaKaoBookProvider implements BookProvider {
 
     @Value("${api.kakao.authorization-header-prefix}")
     private String kakaoHeaderPrefix;
+
+    private final RestTemplate restTemplate;
+
+    public KaKaoBookProvider(RestTemplateBuilder restTemplateBuilder) {
+        restTemplate = restTemplateBuilder.build();
+    }
 
     @Override
     public List<Book> searchBooksByTitle(String title, int size, int page) {
@@ -38,7 +48,8 @@ public class KaKaoBookProvider implements BookProvider {
             .build()
             .toUri();
 
-        KaKaoBookResponseDto kakaoBookResponseDto = getBooks(uri, httpEntityWithHeaders, KaKaoBookResponseDto.class);
+        KaKaoBookResponseDto kakaoBookResponseDto = getBooks(uri, httpEntityWithHeaders, KaKaoBookResponseDto.class,
+            restTemplate);
 
         return kakaoBookResponseDto.toBooks();
     }
@@ -57,7 +68,8 @@ public class KaKaoBookProvider implements BookProvider {
             .build()
             .toUri();
 
-        KaKaoBookResponseDto kakaoBookResponseDto = getBooks(uri, httpEntityWithHeaders, KaKaoBookResponseDto.class);
+        KaKaoBookResponseDto kakaoBookResponseDto = getBooks(uri, httpEntityWithHeaders, KaKaoBookResponseDto.class,
+            restTemplate);
 
         List<Book> books = kakaoBookResponseDto.toBooks();
         validateResultByIsbn(books);
