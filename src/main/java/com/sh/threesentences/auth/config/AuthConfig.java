@@ -32,7 +32,7 @@ public class AuthConfig {
             .antMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
             .antMatchers(HttpMethod.POST, "/api/v1/users").permitAll()
             .antMatchers(HttpMethod.GET, "/api/v1/users/email/duplicate-check").permitAll()
-            .antMatchers(HttpMethod.GET, "/actuator/**").permitAll()
+            .antMatchers(HttpMethod.GET, "/cheese/**").hasAuthority("ADMIN")
             .anyRequest().authenticated()
             .and()
             .formLogin().disable()

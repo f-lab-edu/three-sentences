@@ -40,13 +40,20 @@ api:
     authorization-header-prefix: KakaoAK
 management:
   endpoints:
+    enabled-by-default: false
     web:
+      base-path: /cheese
       exposure:
-        include: "*"
+        include: info, health, prometheus
   endpoint:
     health:
       show-components: always
       show-details: always
+      enabled: true
+    prometheus:
+      enabled: true
+    info:
+      enabled: true
   server:
     port: 9292
 
@@ -90,13 +97,20 @@ api:
     authorization-header-prefix: KakaoAK
 management:
   endpoints:
+    enabled-by-default: false
     web:
+      base-path: /cheese
       exposure:
-        include: "*"
+        include: info, health, prometheus
   endpoint:
     health:
       show-components: always
       show-details: always
+      enabled: true
+    prometheus:
+      enabled: true
+    info:
+      enabled: true
   server:
     port: 9292
 
