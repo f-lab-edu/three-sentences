@@ -4,6 +4,7 @@ import com.sh.threesentences.common.entity.BaseEntity;
 import com.sh.threesentences.readingspace.entity.ReadingSpaceMemberRole;
 import com.sh.threesentences.users.enums.AuthorityType;
 import com.sh.threesentences.users.enums.MembershipType;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -61,7 +62,7 @@ public class User extends BaseEntity {
     private String authorityType = AuthorityType.BASIC.getName();
 
     @OneToMany(mappedBy = "user")
-    private List<ReadingSpaceMemberRole> readingSpaceMemberRoleList;
+    private final List<ReadingSpaceMemberRole> readingSpaceMemberRole = new ArrayList<>();
 
     @Builder
     public User(Long id, String email, String name, String password, MembershipType membership,
@@ -72,6 +73,10 @@ public class User extends BaseEntity {
         this.password = password;
         this.membership = membership;
         this.authorityType = authorityType;
+    }
+
+    public void addMemberRole(ReadingSpaceMemberRole memberRole) {
+        readingSpaceMemberRole.add(memberRole);
     }
 
 }

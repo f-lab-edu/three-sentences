@@ -76,8 +76,8 @@ public interface BookProvider {
      * @param <T>                반환 타입 T
      * @return 요청 응답값
      */
-    default <T> T getBooks(URI uri, HttpEntity<Void> requestWithHeaders, Class<T> responseType) {
-        RestTemplate restTemplate = new RestTemplate();
+    default <T> T getBooks(URI uri, HttpEntity<Void> requestWithHeaders, Class<T> responseType,
+        RestTemplate restTemplate) {
         ResponseEntity<T> responseEntity = restTemplate.exchange(uri, HttpMethod.GET,
             requestWithHeaders, responseType);
 
