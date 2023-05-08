@@ -1,0 +1,21 @@
+global:
+  scrape_interval: 30s     # scrap target의 기본 interval을 30초로 변경 / default = 1m
+  scrape_timeout: 10s      # scrap request 가 timeout 나는 길이 / default = 10s
+  evaluation_interval: 2m  # rule 을 얼마나 빈번하게 검증하는지 / default = 1m
+  external_labels:
+    monitor: 'three-sentences-monitor'       # 기본적으로 붙여줄 라벨
+  query_log_file: query_log_file.log # prometheus의 쿼리 로그들을 기록, 없으면 기록안함
+
+# 규칙을 로딩하고 'evaluation_interval' 설정에 따라 정기적으로 평가
+rule_files:
+  - "rule.yml"  # rule 파일 추가 가능
+
+scrape_configs:
+  - job_name: 'prometheus' # 자기 자신의 데이터를 수집
+    static_configs:
+      - targets: [ 'localhost:9090' ] # 프로메테우스의 주소
+
+  - job_name: 'spring-actuator' # 수집에 대한 고유명
+    metrics_path: '/actuator/prometheus' # 수집할 경로
+    static_configs:
+      - targets: [ 'host.docker.internal:9292' ] # 수집할 서버와 포트

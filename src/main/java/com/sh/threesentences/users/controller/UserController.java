@@ -32,7 +32,6 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/email/duplicate-check")
     public void checkEmailDuplicated(@RequestBody @Valid EmailDuplicateCheckDto emailDuplicateCheckDto) {
-        System.out.println("emailDuplicateCheckDto.getEmail() = " + emailDuplicateCheckDto.getEmail());
         userService.checkEmailDuplicated(emailDuplicateCheckDto.getEmail());
     }
 

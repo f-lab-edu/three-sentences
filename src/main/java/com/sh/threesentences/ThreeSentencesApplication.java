@@ -2,6 +2,7 @@ package com.sh.threesentences;
 
 import com.sh.threesentences.common.config.AuditorAwareImpl;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.actuate.trace.http.InMemoryHttpTraceRepository;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.AuditorAware;
@@ -23,6 +24,11 @@ public class ThreeSentencesApplication {
     @Bean
     public AuditorAware<String> auditorProvider() {
         return new AuditorAwareImpl();
+    }
+
+    @Bean
+    public InMemoryHttpTraceRepository httpExchangeRepository() {
+        return new InMemoryHttpTraceRepository();
     }
 
 }
